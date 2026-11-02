@@ -27,7 +27,9 @@
     width: 100vw;
   }
 
-  /* ===== HIDE NETLIFY BADGE & DRAWER TAB ===== */
+  /* ===== HIDE ALL NETLIFY INJECTIONS (IFRAMES & UNKNOWN CONTAINERS) ===== */
+  iframe,
+  body > iframe,
   #netlify-badge,
   .netlify-badge,
   [data-netlify-badge],
@@ -35,7 +37,6 @@
   [id*="netlify"],
   a[href*="netlify.com"],
   div:has(> a[href*="netlify.com"]),
-  iframe[src*="netlify"],
   iframe#netlify-drawer,
   #netlify-preview-drawer,
   .netlify-drawer,
@@ -50,6 +51,14 @@
     top: -9999px !important;
     left: -9999px !important;
     z-index: -99999 !important;
+  }
+
+  /* Any unknown injected element directly on body */
+  body > *:not(#bgCanvas):not(.screen):not(.modal-overlay):not(.emergency-overlay):not(#airlockCanvas):not(script):not(style) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
   }
 
   #bgCanvas {
@@ -2370,30 +2379,31 @@ window.addEventListener('load', () => {
   }, 600);
 });
 
-// ── Automatically strip out Netlify badge/tab if injected dynamically
-const removeNetlifyBadge = () => {
-  document.querySelectorAll('a, div, iframe, span').forEach(el => {
-    const text = (el.innerText || el.textContent || '').toLowerCase();
-    const href = (el.getAttribute('href') || '').toLowerCase();
-    const id = (el.id || '').toLowerCase();
-    const cls = (el.className && typeof el.className === 'string' ? el.className : '').toLowerCase();
+// ── Purge any injected iframes or foreign body children from Netlify
+const purgeForeignElements = () => {
+  // 1. Remove all iframes (our game uses 0 iframes)
+  document.querySelectorAll('iframe').forEach(f => f.remove());
 
-    const isNetlifyRelated =
-      text.includes('powered by netlify') ||
-      href.includes('netlify.com') ||
-      id.includes('netlify') ||
-      cls.includes('netlify');
+  // 2. Remove any foreign element injected directly into <body>
+  document.querySelectorAll('body > *').forEach(el => {
+    const isGameElement =
+      el.id === 'bgCanvas' ||
+      el.classList.contains('screen') ||
+      el.classList.contains('modal-overlay') ||
+      el.classList.contains('emergency-overlay') ||
+      el.id === 'airlockCanvas' ||
+      el.tagName === 'SCRIPT' ||
+      el.tagName === 'STYLE';
 
-    // Never remove our own app UI elements
-    if (isNetlifyRelated && !el.closest('.glass') && !el.closest('.modal-box')) {
+    if (!isGameElement) {
       el.remove();
     }
   });
 };
 
-removeNetlifyBadge();
-const netlifyObserver = new MutationObserver(removeNetlifyBadge);
-netlifyObserver.observe(document.documentElement, { childList: true, subtree: true });
+purgeForeignElements();
+const netlifyObserver = new MutationObserver(purgeForeignElements);
+netlifyObserver.observe(document.body, { childList: true, subtree: true });
 
 console.log('🚀 IMPOSTOR: Cyber Space Edition — Ready with Slot Deletion & Mobile Download/Install!');
 </script>
