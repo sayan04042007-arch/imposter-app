@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Impostor: Space Deduction</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #080a10;
+      --bg-card: #121624;
+      --crew-cyan: #00f2fe;
+      --impostor-red: #ff3366;
+      --gold: #ffbe0b;
+      --text-main: #f8fafc;
+      --text-dim: #94a3b8;
+      --font-display: 'Orbitron', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 20% 20%, rgba(0, 242, 254, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(255, 51, 102, 0.08) 0%, transparent 40%);
+    }
+
+    /* Mobile Container Frame */
+    .game-container {
+      width: 100%;
+      max-width: 440px;
+      min-height: 100vh;
+      background: var(--bg-dark);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Screen Titles */
+    .title-banner {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .title-banner h1 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, #00f2fe 0%, #ff3366 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+    }
+
+    .title-banner p {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    /* General Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .card h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--crew-cyan);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Player Chips */
+    .players-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .player-tag {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .player-input-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    input[type="text"]:focus {
+      border-color: var(--crew-cyan);
+    }
+
+    select {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 15px;
+      border-radius: 14px;
+      border: none;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+      color: #080a10;
+      box-shadow: 0 4px 20px rgba(0, 242, 254, 0.4);
+    }
+    .btn-danger {
+      background: linear-gradient(135deg, #ff3366 0%, #ff0844 100%);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(255, 51, 102, 0.4);
+    }
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Secret Card Reveal UI */
+    .reveal-card {
+      background: var(--bg-card);
+      border: 2px dashed rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      margin: 20px 0;
+      transition: all 0.3s;
+    }
+
+    .reveal-card.revealed {
+      border-style: solid;
+      border-color: var(--crew-cyan);
+      box-shadow: 0 0 30px rgba(0, 242, 254, 0.25);
+    }
+
+    .role-badge {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 900;
+      margin: 12px 0 6px;
+    }
+    .role-impostor { color: var(--impostor-red); text-shadow: 0 0 20px rgba(255, 51, 102, 0.6); }
+    .role-crewmate { color: var(--crew-cyan); text-shadow: 0 0 20px rgba(0, 242, 254, 0.6); }
+
+    .secret-word-display {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 10px 20px;
+      border-radius: 12px;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    /* Voting Grid */
+    .vote-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .vote-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .vote-card:active {
+      border-color: var(--impostor-red);
+      transform: scale(0.96);
+    }
+    .vote-card .name {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+    .vote-card .votes-count {
+      font-size: 0.78rem;
+      color: var(--impostor-red);
+      font-weight: 600;
+    }
+
+    /* Ejection Screen */
+    .eject-screen {
+      text-align: center;
+      padding: 60px 10px;
+    }
+    .eject-avatar {
+      font-size: 4rem;
+      animation: float-away 3s forwards ease-in-out;
+    }
+    @keyframes float-away {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-80px) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-container">
+    
+    <!-- Title -->
+    <div class="title-banner">
+      <h1>IMPOSTOR</h1>
+      <p>Pass & Play • Space Deduction</p>
+    </div>
+
+    <!-- SCREEN 1: LOBBY SETUP -->
+    <div id="screenLobby">
+      <div class="card">
+        <h3>1. Crew Roster (<span id="playerCount">4</span> Players)</h3>
+        <div class="players-list" id="playersList"></div>
+        <div class="player-input-row">
+          <input type="text" id="newPlayerName" placeholder="Enter player name...">
+          <button class="btn btn-primary" id="addPlayerBtn" style="width: auto; padding: 10px 18px;">+ Add</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>2. Word Category</h3>
+        <select id="categorySelect">
+          <option value="gaming">🎮 Gaming & Esports</option>
+          <option value="college">🎓 College & Hostel Life</option>
+          <option value="food">🍕 Food & Midnight Snacks</option>
+          <option value="movies">🎬 Movies & Pop Culture</option>
+          <option value="tech">💻 Coding & Tech Giants</option>
+        </select>
+      </div>
+
+      <button class="btn btn-danger" id="startMissionBtn">
+        🚀 LAUNCH MISSION
+      </button>
+    </div>
+
+    <!-- SCREEN 2: PASS & REVEAL CARD -->
+    <div id="screenReveal" style="display: none;">
+      <div class="card" style="text-align: center;">
+        <span style="font-size: 2.5rem;">🤫</span>
+        <h2 id="passInstruction" style="font-family: var(--font-display); margin: 8px 0; font-size: 1.4rem;">Pass to Sayan</h2>
+        <p style="color: var(--text-dim); font-size: 0.85rem;">Make sure nobody else is looking at the screen!</p>
+      </div>
+
+      <div class="reveal-card" id="revealCard">
+        <div id="revealPrompt">
+          <span style="font-size: 3rem;">👆</span>
+          <h3 style="margin-top: 10px; color: #fff;">TAP TO REVEAL ROLE</h3>
+          <p style="color: var(--text-dim); font-size: 0.8rem;">Tap to see your secret identity</p>
+        </div>
+        <div id="revealContent" style="display: none;">
+          <div class="role-badge" id="roleBadge">CREWMATE</div>
+          <p style="color: var(--text-dim); font-size: 0.85rem;" id="roleDescription">Your secret word is:</p>
+          <div class="secret-word-display" id="secretWord">PIZZA</div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" id="nextPlayerBtn" style="display: none;">
+        ✅ Hidden! Pass to Next
+      </button>
+    </div>
+
+    <!-- SCREEN 3: DISCUSSION & EMERGENCY MEETING -->
+    <div id="screenDiscussion" style="display: none;">
+      <div class="card" style="text-align: center;">
+        <h2 style="font-family: var(--font-display); color: var(--gold);">MISSION IN PROGRESS</h2>
+        <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 6px;">
+          Take turns saying <strong>ONE WORD</strong> that relates to your secret word without giving it away!
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Turn Order</h3>
+        <ol id="turnOrderList" style="padding-left: 20px; font-size: 0.95rem; line-height: 1.8;"></ol>
+      </div>
+
+      <button class="btn btn-danger" id="emergencyMeetingBtn" style="padding: 20px; font-size: 1.1rem;">
+        🚨 EMERGENCY MEETING
+      </button>
+    </div>
+
+    <!-- SCREEN 4: VOTING -->
+    <div id="screenVoting" style="display: none;">
+      <div class="card" style="text-align: center;">
+        <h2 style="font-family: var(--font-display); color: var(--impostor-red);">VOTE TO EJECT</h2>
+        <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 6px;">Who is the Impostor? Tap a player to cast your vote.</p>
+      </div>
+
+      <div class="vote-grid" id="voteGrid"></div>
+      <button class="btn btn-danger" id="confirmVoteBtn">CONFIRM EJECTION</button>
+    </div>
+
+    <!-- SCREEN 5: EJECTION RESULT -->
+    <div id="screenResult" style="display: none;">
+      <div class="eject-screen">
+        <div class="eject-avatar">🧑‍🚀</div>
+        <h2 id="ejectMessage" style="font-family: var(--font-display); font-size: 1.4rem; margin: 16px 0 8px;">Player was ejected.</h2>
+        <p id="ejectVerdict" style="font-size: 1.1rem; font-weight: 700; color: var(--crew-cyan);">They were NOT the Impostor.</p>
+      </div>
+
+      <button class="btn btn-primary" id="playAgainBtn">🔄 PLAY AGAIN</button>
+    </div>
+
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // Audio Synthesizer (Zero-file sound effects)
+    const AudioEngine = {
+      ctx: null,
+      init() {
+        if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      },
+      playAlarm() {
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(440, this.ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(880, this.ctx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.5);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.5);
+      },
+      playBeep() {
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.frequency.setValueAtTime(600, this.ctx.currentTime);
+        gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.15);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.15);
+      }
+    };
+
+    // Secret Word Bank (Crew Word vs Impostor Decoy)
+    const WORD_BANK = {
+      gaming: [
+        { crew: "Minecraft", impostor: "Roblox" },
+        { crew: "GTA 5", impostor: "Cyberpunk" },
+        { crew: "Free Fire", impostor: "PUBG Mobile" },
+        { crew: "PlayStation", impostor: "Xbox" }
+      ],
+      college: [
+        { crew: "Exam Hall", impostor: "Library" },
+        { crew: "Hostel Warden", impostor: "College Dean" },
+        { crew: "Proxy Attendance", impostor: "Mass Bunk" },
+        { crew: "Canteen Chai", impostor: "Hostel Mess" }
+      ],
+      food: [
+        { crew: "Pizza", impostor: "Burger" },
+        { crew: "Biryani", impostor: "Fried Rice" },
+        { crew: "Maggi", impostor: "Pasta" },
+        { crew: "Ice Cream", impostor: "Milkshake" }
+      ],
+      movies: [
+        { crew: "Spider-Man", impostor: "Batman" },
+        { crew: "Iron Man", impostor: "Captain America" },
+        { crew: "Avatar", impostor: "Interstellar" },
+        { crew: "Harry Potter", impostor: "Lord of the Rings" }
+      ],
+      tech: [
+        { crew: "Google", impostor: "Microsoft" },
+        { crew: "iPhone", impostor: "Android" },
+        { crew: "Python", impostor: "JavaScript" },
+        { crew: "ChatGPT", impostor: "Gemini" }
+      ]
+    };
+
+    // Game State
+    let players = ["Sayan", "Rahul", "Alex", "Maya"];
+    let currentRevealIndex = 0;
+    let imposterIndex = -1;
+    let selectedWordPair = null;
+    let votes = {};
+    let selectedVote = null;
+
+    // DOM Elements
+    const screenLobby = document.getElementById('screenLobby');
+    const screenReveal = document.getElementById('screenReveal');
+    const screenDiscussion = document.getElementById('screenDiscussion');
+    const screenVoting = document.getElementById('screenVoting');
+    const screenResult = document.getElementById('screenResult');
+
+    const playersListEl = document.getElementById('playersList');
+    const playerCountEl = document.getElementById('playerCount');
+    const newPlayerNameInput = document.getElementById('newPlayerName');
+    const addPlayerBtn = document.getElementById('addPlayerBtn');
+    const startMissionBtn = document.getElementById('startMissionBtn');
+
+    const passInstruction = document.getElementById('passInstruction');
+    const revealCard = document.getElementById('revealCard');
+    const revealPrompt = document.getElementById('revealPrompt');
+    const revealContent = document.getElementById('revealContent');
+    const roleBadge = document.getElementById('roleBadge');
+    const roleDescription = document.getElementById('roleDescription');
+    const secretWord = document.getElementById('secretWord');
+    const nextPlayerBtn = document.getElementById('nextPlayerBtn');
+
+    const turnOrderList = document.getElementById('turnOrderList');
+    const emergencyMeetingBtn = document.getElementById('emergencyMeetingBtn');
+    const voteGrid = document.getElementById('voteGrid');
+    const confirmVoteBtn = document.getElementById('confirmVoteBtn');
+
+    const ejectMessage = document.getElementById('ejectMessage');
+    const ejectVerdict = document.getElementById('ejectVerdict');
+    const playAgainBtn = document.getElementById('playAgainBtn');
+
+    // Render Players in Lobby
+    function renderLobbyPlayers() {
+      playersListEl.innerHTML = players.map((p, idx) => `
+        <div class="player-tag">
+          🧑‍🚀 ${p}
+          ${players.length > 3 ? `<span onclick="removePlayer(${idx})" style="cursor:pointer; color:#ff3366; margin-left:4px;">&times;</span>` : ''}
+        </div>
+      `).join('');
+      playerCountEl.textContent = players.length;
+    }
+
+    window.removePlayer = function(idx) {
+      if (players.length > 3) {
+        players.splice(idx, 1);
+        renderLobbyPlayers();
+      }
+    };
+
+    addPlayerBtn.addEventListener('click', () => {
+      const name = newPlayerNameInput.value.trim();
+      if (name && !players.includes(name)) {
+        players.push(name);
+        newPlayerNameInput.value = '';
+        renderLobbyPlayers();
+        AudioEngine.playBeep();
+      }
+    });
+
+    // START MISSION (RANDOM IMPOSTOR ALGORITHM)
+    startMissionBtn.addEventListener('click', () => {
+      AudioEngine.playAlarm();
+
+      // 1. Pick a completely random Impostor
+      imposterIndex = Math.floor(Math.random() * players.length);
+
+      // 2. Pick a random word pair from chosen category
+      const category = document.getElementById('categorySelect').value;
+      const categoryList = WORD_BANK[category];
+      selectedWordPair = categoryList[Math.floor(Math.random() * categoryList.length)];
+
+      currentRevealIndex = 0;
+      screenLobby.style.display = 'none';
+      screenReveal.style.display = 'block';
+
+      prepareRevealForCurrentPlayer();
+    });
+
+    // Prepare Secret Card for Current Player
+    function prepareRevealForCurrentPlayer() {
+      const playerName = players[currentRevealIndex];
+      passInstruction.textContent = `Pass to ${playerName}`;
+
+      revealCard.classList.remove('revealed');
+      revealPrompt.style.display = 'block';
+      revealContent.style.display = 'none';
+      nextPlayerBtn.style.display = 'none';
+
+      // Check if this player is the random Impostor
+      const isImpostor = (currentRevealIndex === imposterIndex);
+
+      if (isImpostor) {
+        roleBadge.textContent = "🚨 IMPOSTOR";
+        roleBadge.className = "role-badge role-impostor";
+        roleDescription.textContent = "Blend in! Your decoy word is:";
+        secretWord.textContent = selectedWordPair.impostor;
+      } else {
+        roleBadge.textContent = "🛡️ CREWMATE";
+        roleBadge.className = "role-badge role-crewmate";
+        roleDescription.textContent = "Find the impostor! Your word is:";
+        secretWord.textContent = selectedWordPair.crew;
+      }
+    }
+
+    // Tap to Reveal Card
+    revealCard.addEventListener('click', () => {
+      AudioEngine.playBeep();
+      revealCard.classList.add('revealed');
+      revealPrompt.style.display = 'none';
+      revealContent.style.display = 'block';
+      nextPlayerBtn.style.display = 'block';
+    });
+
+    // Next Player Button
+    nextPlayerBtn.addEventListener('click', () => {
+      AudioEngine.playBeep();
+      currentRevealIndex++;
+
+      if (currentRevealIndex < players.length) {
+        prepareRevealForCurrentPlayer();
+      } else {
+        // All players have seen their words! Start discussion.
+        startDiscussionRound();
+      }
+    });
+
+    // DISCUSSION ROUND
+    function startDiscussionRound() {
+      screenReveal.style.display = 'none';
+      screenDiscussion.style.display = 'block';
+
+      // Shuffle turn order so discussion is unpredictable
+      const shuffled = [...players].sort(() => Math.random() - 0.5);
+      turnOrderList.innerHTML = shuffled.map(p => `<li><strong>${p}</strong> gives 1 clue</li>`).join('');
+    }
+
+    // EMERGENCY MEETING
+    emergencyMeetingBtn.addEventListener('click', () => {
+      AudioEngine.playAlarm();
+      screenDiscussion.style.display = 'none';
+      screenVoting.style.display = 'block';
+
+      // Render Voting Grid
+      votes = {};
+      selectedVote = null;
+      renderVoteGrid();
+    });
+
+    function renderVoteGrid() {
+      voteGrid.innerHTML = players.map(p => `
+        <div class="vote-card ${selectedVote === p ? 'selected' : ''}" onclick="selectVote('${p}')" style="${selectedVote === p ? 'border-color: #ff3366; background: rgba(255, 51, 102, 0.2);' : ''}">
+          <div style="font-size: 2rem;">🧑‍🚀</div>
+          <div class="name">${p}</div>
+        </div>
+      `).join('');
+    }
+
+    window.selectVote = function(player) {
+      AudioEngine.playBeep();
+      selectedVote = player;
+      renderVoteGrid();
+    };
+
+    // CONFIRM EJECTION
+    confirmVoteBtn.addEventListener('click', () => {
+      if (!selectedVote) {
+        alert("Please tap a player to vote them out!");
+        return;
+      }
+
+      AudioEngine.playAlarm();
+      screenVoting.style.display = 'none';
+      screenResult.style.display = 'block';
+
+      const ejectedIndex = players.indexOf(selectedVote);
+      const wasImpostor = (ejectedIndex === imposterIndex);
+
+      ejectMessage.textContent = `${selectedVote} was ejected.`;
+
+      if (wasImpostor) {
+        ejectVerdict.textContent = "🎉 They WERE the Impostor! Crewmates Win!";
+        ejectVerdict.style.color = "var(--crew-cyan)";
+      } else {
+        const actualImpostorName = players[imposterIndex];
+        ejectVerdict.textContent = `💀 They were NOT the Impostor. ${actualImpostorName} was the Impostor!`;
+        ejectVerdict.style.color = "var(--impostor-red)";
+      }
+    });
+
+    // PLAY AGAIN
+    playAgainBtn.addEventListener('click', () => {
+      AudioEngine.playBeep();
+      screenResult.style.display = 'none';
+      screenLobby.style.display = 'block';
+    });
+
+    // Initialize
+    renderLobbyPlayers();
+  </script>
+</body>
+</html>
