@@ -13,6 +13,37 @@
 <meta name="apple-mobile-web-app-title" content="Impostor Space">
 <meta name="theme-color" content="#001122">
 
+<!-- INSTANT NETLIFY BADGE KILLER (Runs in HEAD before DOM paints) -->
+<script>
+  // 1. Write the official Netlify hide token into localStorage before Netlify's HUD script runs
+  try {
+    localStorage.setItem('nl-hud:public:v1', JSON.stringify({ hidden: true, dismissed: true, minimized: true }));
+    localStorage.setItem('netlify-badge-dismissed', 'true');
+  } catch(e) {}
+
+  // 2. Intercept element creation to block #nl-badge-frame
+  const _origCreateElement = document.createElement.bind(document);
+  document.createElement = function(tag, opts) {
+    const el = _origCreateElement(tag, opts);
+    if (tag && tag.toLowerCase() === 'iframe') {
+      el.style.setProperty('display', 'none', 'important');
+      el.style.setProperty('visibility', 'hidden', 'important');
+      el.style.setProperty('width', '0', 'important');
+      el.style.setProperty('height', '0', 'important');
+      setTimeout(() => el.remove(), 0);
+    }
+    return el;
+  };
+
+  // 3. Fast MutationObserver targeting Netlify's #nl-badge-frame
+  const killBadgeEarly = new MutationObserver(() => {
+    const badge = document.getElementById('nl-badge-frame');
+    if (badge) badge.remove();
+    document.querySelectorAll('iframe, [title*="Powered by Netlify"], [id*="nl-badge"], [class*="nl-"]').forEach(el => el.remove());
+  });
+  killBadgeEarly.observe(document.documentElement, { childList: true, subtree: true });
+</script>
+
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
 
@@ -27,9 +58,17 @@
     width: 100vw;
   }
 
-  /* ===== HIDE ALL NETLIFY INJECTIONS (IFRAMES & UNKNOWN CONTAINERS) ===== */
+  /* ===== HIDE ALL NETLIFY INJECTIONS (#nl-badge-frame & IFRAMES) ===== */
+  #nl-badge-frame,
+  iframe#nl-badge-frame,
+  iframe[title*="Powered by Netlify"],
+  iframe[title*="Netlify"],
+  iframe[id*="nl-badge"],
   iframe,
   body > iframe,
+  .nl-wrap,
+  .nl-card,
+  .nl-icon-btn,
   #netlify-badge,
   .netlify-badge,
   [data-netlify-badge],
