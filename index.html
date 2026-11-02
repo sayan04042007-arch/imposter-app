@@ -40,14 +40,14 @@
 
   /* ===== GLASS CARD ===== */
   .glass {
-    background: rgba(0,20,40,0.75);
+    background: rgba(0,20,40,0.78);
     border: 1px solid rgba(0,255,255,0.25);
     border-radius: 20px;
     backdrop-filter: blur(18px);
     box-shadow: 0 0 40px rgba(0,255,255,0.15), inset 0 0 30px rgba(0,0,0,0.3);
-    padding: 30px;
+    padding: 26px;
     width: 100%;
-    max-width: 480px;
+    max-width: 490px;
     max-height: 92vh;
     overflow-y: auto;
   }
@@ -55,7 +55,7 @@
   /* ===== LOGO / TITLE ===== */
   .logo {
     font-family: 'Orbitron', sans-serif;
-    font-size: clamp(1.6rem, 5vw, 2.8rem);
+    font-size: clamp(1.6rem, 5vw, 2.7rem);
     font-weight: 900;
     text-align: center;
     background: linear-gradient(135deg, #00ffff, #ff00ff, #ffff00);
@@ -76,7 +76,7 @@
     color: #00ffff88;
     font-size: 0.85rem;
     letter-spacing: 3px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     text-transform: uppercase;
   }
 
@@ -86,7 +86,7 @@
     align-items: center;
     gap: 10px;
     margin-bottom: 12px;
-    animation: slideIn 0.4s ease;
+    animation: slideIn 0.35s ease;
   }
   @keyframes slideIn {
     from { opacity: 0; transform: translateX(-20px); }
@@ -123,11 +123,11 @@
   /* ===== BUTTONS ===== */
   .btn {
     width: 100%;
-    padding: 14px;
+    padding: 13px;
     border: none;
     border-radius: 12px;
     font-family: 'Orbitron', sans-serif;
-    font-size: 1rem;
+    font-size: 0.98rem;
     font-weight: 700;
     cursor: pointer;
     margin: 6px 0;
@@ -171,10 +171,10 @@
 
   .btn-secondary {
     background: rgba(255,255,255,0.08);
-    color: #aaa;
-    border: 1px solid rgba(255,255,255,0.15);
+    color: #ccc;
+    border: 1px solid rgba(255,255,255,0.18);
   }
-  .btn-secondary:hover { background: rgba(255,255,255,0.14); color: #fff; }
+  .btn-secondary:hover { background: rgba(255,255,255,0.15); color: #fff; }
 
   .btn-ghost {
     background: transparent;
@@ -207,7 +207,7 @@
     color: #00ffff88;
     letter-spacing: 2px;
     text-transform: uppercase;
-    margin: 16px 0 8px;
+    margin: 14px 0 6px;
   }
   select {
     width: 100%;
@@ -229,34 +229,30 @@
   .divider {
     border: none;
     border-top: 1px solid rgba(0,255,255,0.12);
-    margin: 20px 0;
+    margin: 16px 0;
   }
 
-  /* ===== ROLE CARD (Reveal Screen) ===== */
+  /* ===== ROLE CARD ===== */
   .role-card {
     background: rgba(0,0,0,0.5);
     border-radius: 16px;
-    padding: 28px;
+    padding: 24px;
     text-align: center;
     margin: 16px 0;
-    border: 2px solid transparent;
+    border: 2px solid #00ffff;
+    box-shadow: 0 0 30px rgba(0,255,255,0.3);
   }
-  .role-card.crew { border-color: #00ffff; box-shadow: 0 0 30px rgba(0,255,255,0.3); }
-  .role-card.impostor { border-color: #ff0040; box-shadow: 0 0 30px rgba(255,0,64,0.4); }
-  .role-card.jester { border-color: #ffaa00; box-shadow: 0 0 30px rgba(255,170,0,0.4); }
 
-  .role-emoji { font-size: 3.5rem; margin-bottom: 10px; display: block; animation: float 3s ease-in-out infinite; }
-  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  .role-emoji { font-size: 3.2rem; margin-bottom: 8px; display: block; animation: float 3s ease-in-out infinite; }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
 
   .role-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: 900;
     margin-bottom: 8px;
+    color: #00ffff;
   }
-  .role-title.crew { color: #00ffff; }
-  .role-title.impostor { color: #ff0040; }
-  .role-title.jester { color: #ffaa00; }
 
   .word-display {
     font-size: 1.8rem;
@@ -264,43 +260,134 @@
     margin: 12px 0;
     padding: 12px 24px;
     border-radius: 10px;
-    background: rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.08);
     display: inline-block;
     letter-spacing: 2px;
+    border: 1px dashed rgba(0,255,255,0.4);
+    color: #ffff44;
+    text-shadow: 0 0 15px rgba(255,255,68,0.5);
   }
 
-  /* ===== PLAYER TURN INDICATOR ===== */
+  /* ===== TURN INDICATOR ===== */
   .turn-indicator {
     font-family: 'Orbitron', sans-serif;
     font-size: 1.1rem;
     color: #ffff00;
     text-align: center;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     text-shadow: 0 0 15px rgba(255,255,0,0.6);
   }
 
-  /* ===== VOTING ===== */
-  .vote-btn {
+  /* ===== VOTING BALLOT STYLES ===== */
+  .voter-box {
+    text-align: center;
+    background: rgba(0,255,255,0.06);
+    border: 1px solid rgba(0,255,255,0.25);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .voter-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.4rem;
+    color: #00ffff;
+    font-weight: 900;
+    margin: 6px 0;
+    text-shadow: 0 0 15px rgba(0,255,255,0.6);
+  }
+  .voter-step {
+    font-size: 0.8rem;
+    color: #ffff00;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .candidate-btn {
     width: 100%;
-    padding: 14px 16px;
+    padding: 12px 16px;
     margin: 6px 0;
     background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.15);
+    border: 1px solid rgba(0,255,255,0.2);
     border-radius: 12px;
     color: #fff;
     font-family: 'Rajdhani', sans-serif;
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
     text-align: left;
-    transition: all 0.3s;
+    transition: all 0.25s;
     display: flex;
     align-items: center;
     gap: 12px;
   }
-  .vote-btn:hover { background: rgba(255,0,64,0.2); border-color: #ff0040; }
-  .vote-btn.voted { background: rgba(255,0,64,0.3); border-color: #ff0040; pointer-events: none; }
-  .vote-count { margin-left: auto; font-size: 0.85rem; color: #ff6644; font-weight: 700; }
+  .candidate-btn:hover {
+    background: rgba(0,255,255,0.12);
+    border-color: #00ffff;
+    transform: translateX(4px);
+  }
+  .candidate-btn.selected {
+    background: linear-gradient(90deg, rgba(255,0,64,0.3), rgba(255,100,0,0.25));
+    border-color: #ff0040;
+    box-shadow: 0 0 20px rgba(255,0,64,0.4);
+    transform: translateX(6px);
+  }
+  .candidate-check {
+    margin-left: auto;
+    font-size: 1rem;
+    color: #ff0040;
+    font-weight: 900;
+  }
+
+  /* ===== WINNER SECTION ===== */
+  .winner-box {
+    background: linear-gradient(135deg, rgba(255,215,0,0.18), rgba(255,100,0,0.1));
+    border: 2px solid rgba(255,215,0,0.6);
+    border-radius: 16px;
+    padding: 18px;
+    margin: 16px 0;
+    text-align: center;
+    box-shadow: 0 0 35px rgba(255,215,0,0.25);
+    animation: pulseWinner 2s infinite ease-in-out;
+  }
+  @keyframes pulseWinner {
+    0%,100% { box-shadow: 0 0 25px rgba(255,215,0,0.2); }
+    50% { box-shadow: 0 0 45px rgba(255,215,0,0.45); }
+  }
+
+  .winner-pill {
+    display: inline-block;
+    background: linear-gradient(135deg, #ffd700, #ff8800);
+    color: #000;
+    font-weight: 800;
+    font-family: 'Orbitron', sans-serif;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin: 4px;
+    font-size: 0.95rem;
+    box-shadow: 0 0 15px rgba(255,215,0,0.5);
+  }
+
+  .vote-breakdown {
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    padding: 12px;
+    margin: 12px 0;
+    font-size: 0.88rem;
+    line-height: 1.9;
+    text-align: left;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .vote-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .vote-row:last-child { border-bottom: none; }
+  .vote-correct { color: #00ff88; font-weight: 700; }
+  .vote-wrong { color: #ff5566; }
 
   /* ===== SUS METER ===== */
   .sus-bar-bg {
@@ -320,7 +407,7 @@
   }
 
   /* ===== RESULT SCREEN ===== */
-  .result-emoji { font-size: 5rem; display: block; text-align: center; margin: 10px 0; animation: bounceIn 0.6s cubic-bezier(0.68,-0.55,0.265,1.55); }
+  .result-emoji { font-size: 4.5rem; display: block; text-align: center; margin: 6px 0; animation: bounceIn 0.6s cubic-bezier(0.68,-0.55,0.265,1.55); }
   @keyframes bounceIn {
     0% { transform: scale(0); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
@@ -331,25 +418,25 @@
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: rgba(0,0,0,0.85);
+    background: rgba(0,0,0,0.88);
     z-index: 100;
     display: none;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    backdrop-filter: blur(8px);
+    padding: 16px;
+    backdrop-filter: blur(10px);
   }
   .modal-overlay.open { display: flex; }
   .modal-box {
     background: linear-gradient(135deg, rgba(0,15,30,0.98), rgba(0,30,60,0.98));
     border: 1px solid rgba(0,255,255,0.35);
     border-radius: 20px;
-    padding: 28px;
+    padding: 24px;
     width: 100%;
-    max-width: 440px;
-    max-height: 85vh;
+    max-width: 450px;
+    max-height: 88vh;
     overflow-y: auto;
-    box-shadow: 0 0 60px rgba(0,255,255,0.2);
+    box-shadow: 0 0 60px rgba(0,255,255,0.25);
     animation: modalIn 0.3s ease;
   }
   @keyframes modalIn {
@@ -359,10 +446,11 @@
 
   .modal-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.3rem;
+    font-size: 1.15rem;
     color: #00ffff;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     text-align: center;
+    letter-spacing: 1px;
   }
   .modal-rule {
     display: flex;
@@ -394,8 +482,8 @@
   }
   .emergency-overlay.active { display: flex; }
   @keyframes emergencyFlash {
-    0%,100% { background: rgba(255,0,0,0.15); }
-    50% { background: rgba(255,0,0,0.35); }
+    0%,100% { background: rgba(255,0,0,0.18); }
+    50% { background: rgba(255,0,0,0.4); }
   }
   .emergency-text {
     font-family: 'Orbitron', sans-serif;
@@ -428,7 +516,7 @@
 
   /* ===== HEARTBEAT ===== */
   #heartbeatSvg { width: 100%; height: 60px; }
-  .hb-line { stroke: #00ff88; stroke-width: 2; fill: none; animation: drawLine 1.5s ease-in-out infinite; }
+  .hb-line { stroke: #00ff88; stroke-width: 2; fill: none; }
 
   /* ===== ADD SLOT BTN ===== */
   .add-slot-btn {
@@ -446,11 +534,10 @@
   }
   .add-slot-btn:hover { border-color: #00ffff; color: #00ffff; background: rgba(0,255,255,0.05); }
 
-  /* ===== SMALL TEXT ===== */
-  .hint { font-size: 0.78rem; color: rgba(255,255,255,0.3); text-align: center; margin-top: 8px; }
+  .hint { font-size: 0.78rem; color: rgba(255,255,255,0.35); text-align: center; margin-top: 8px; }
 
   /* ===== DISCUSSION TIMER ===== */
-  .timer-ring { display: flex; justify-content: center; margin: 12px 0; }
+  .timer-ring { display: flex; justify-content: center; margin: 10px 0; }
   .timer-num {
     font-family: 'Orbitron', sans-serif;
     font-size: 2.5rem;
@@ -458,14 +545,13 @@
     text-shadow: 0 0 20px rgba(255,255,0,0.6);
   }
 
-  /* Planet ring effect */
   .planet-info {
     background: rgba(255,170,0,0.08);
     border: 1px solid rgba(255,170,0,0.25);
     border-radius: 12px;
     padding: 10px 14px;
     font-size: 0.82rem;
-    color: rgba(255,200,100,0.8);
+    color: rgba(255,200,100,0.85);
     margin: 12px 0;
     text-align: center;
   }
@@ -474,7 +560,7 @@
 <body>
 
 <!-- ═══════════════════════════════════════════
-     BACKGROUND CANVAS (the epic space scene!)
+     BACKGROUND CANVAS
 ═══════════════════════════════════════════ -->
 <canvas id="bgCanvas"></canvas>
 
@@ -494,9 +580,7 @@
       👥 Enter Player Names
     </div>
 
-    <div id="playerSlots">
-      <!-- Slots are generated by JS -->
-    </div>
+    <div id="playerSlots"></div>
 
     <button class="add-slot-btn" onclick="addPlayerSlot()">＋ Add Another Player</button>
 
@@ -519,32 +603,32 @@
       🚀 LAUNCH MISSION
     </button>
 
-    <p class="hint">Pass the phone between players during reveals</p>
+    <p class="hint">Pass the phone between players during secret reveals & voting</p>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SCREEN 2: ROLE REVEAL
+     SCREEN 2: SECRET WORD REVEAL
 ═══════════════════════════════════════════ -->
 <div id="revealScreen" class="screen">
   <div class="glass">
     <div class="turn-indicator" id="turnIndicator">PLAYER'S TURN</div>
 
     <div id="tapToReveal" style="text-align:center; cursor:pointer;" onclick="flipCard()">
-      <div style="font-size:3rem; margin:20px 0; animation: float 2s ease-in-out infinite;">👁️</div>
-      <div style="font-family:'Orbitron',sans-serif; font-size:1rem; color:#00ffff;">TAP TO SEE YOUR ROLE</div>
-      <div style="font-size:0.78rem; color:#ffffff44; margin-top:8px;">(Hide screen from others)</div>
+      <div style="font-size:3.2rem; margin:20px 0; animation: float 2s ease-in-out infinite;">👁️</div>
+      <div style="font-family:'Orbitron',sans-serif; font-size:1.05rem; color:#00ffff;">TAP TO SEE YOUR SECRET WORD</div>
+      <div style="font-size:0.8rem; color:#ffffff44; margin-top:8px;">(Keep phone hidden from other players)</div>
     </div>
 
     <div id="roleContent" style="display:none;">
       <div class="role-card" id="roleCard">
-        <span class="role-emoji" id="roleEmoji">🚀</span>
-        <div class="role-title" id="roleTitle">CREW</div>
-        <div style="font-size:0.85rem; color:#aaa; margin:8px 0;">YOUR WORD:</div>
+        <span class="role-emoji" id="roleEmoji">🔐</span>
+        <div class="role-title" id="roleTitle">YOUR SECRET WORD</div>
+        <div style="font-size:0.82rem; color:#aaa; margin:6px 0;">REMEMBER THIS:</div>
         <div class="word-display" id="wordDisplay">???</div>
-        <div style="font-size:0.82rem; color:#aaa; margin-top:12px; line-height:1.5;" id="roleDesc"></div>
+        <div style="font-size:0.84rem; color:#bbb; margin-top:12px; line-height:1.5;" id="roleDesc"></div>
       </div>
-      <button class="btn btn-secondary" onclick="nextPlayer()">✅ Done — Pass Phone</button>
+      <button class="btn btn-secondary" onclick="nextPlayer()">✅ Done — Pass Phone to Next Player</button>
     </div>
   </div>
 </div>
@@ -554,12 +638,12 @@
 ═══════════════════════════════════════════ -->
 <div id="discussionScreen" class="screen">
   <div class="glass">
-    <div class="logo" style="font-size:1.6rem; margin-bottom:8px;">💬 DISCUSSION</div>
+    <div class="logo" style="font-size:1.6rem; margin-bottom:6px;">💬 DISCUSSION</div>
     <div class="timer-ring"><span class="timer-num" id="discTimer">60</span></div>
 
     <div class="planet-info">
       🗣 Each player gives ONE clue about their word.<br>
-      Impostors — don't get caught!
+      Listen carefully — someone has an off-topic word!
     </div>
 
     <div style="margin:12px 0;">
@@ -570,112 +654,143 @@
     <hr class="divider">
 
     <button class="btn btn-danger" onclick="triggerEmergency()">🚨 EMERGENCY MEETING</button>
-    <button class="btn btn-primary" onclick="goToVoting()">⚖️ PROCEED TO VOTE</button>
+    <button class="btn btn-primary" onclick="goToVoting()">🗳️ PROCEED TO VOTE</button>
     <button class="btn btn-ghost" onclick="openSusMeter()">💓 Sus-O-Meter Scan</button>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SCREEN 4: VOTING
+     SCREEN 4: TURN-BY-TURN SECRET VOTING
 ═══════════════════════════════════════════ -->
 <div id="votingScreen" class="screen">
   <div class="glass">
-    <div class="logo" style="font-size:1.5rem; margin-bottom:8px;">⚖️ VOTE THE IMPOSTOR</div>
-    <div style="text-align:center; font-size:0.85rem; color:#aaa; margin-bottom:20px;">
-      Who do you think is lying?
+    <div class="logo" style="font-size:1.5rem; margin-bottom:4px;">🗳️ SECRET VOTING</div>
+    <div class="subtitle" style="margin-bottom:14px;">Every player casts a private vote</div>
+
+    <!-- PRIVACY GATE: Shown before each player votes to prevent peeking -->
+    <div id="votingPrivacyGate" style="text-align:center; padding:10px 0;">
+      <div class="voter-box">
+        <div class="voter-step" id="voterStepText">VOTER 1 OF 3</div>
+        <div style="font-size:0.85rem; color:#aaa; margin-top:6px;">PASS THE PHONE TO:</div>
+        <div class="voter-name" id="voterTargetName">PLAYER</div>
+        <div style="font-size:0.8rem; color:#ffffff55; margin-top:6px;">🔒 Only this player should look at the screen!</div>
+      </div>
+      <button class="btn btn-primary" style="margin-top:14px;" onclick="openPrivateBallot()">
+        🔓 I AM READY — CAST MY VOTE
+      </button>
     </div>
-    <div id="voteButtons"></div>
-    <button class="btn btn-ghost" style="margin-top:12px;" onclick="skipVote()">🤐 Skip Vote</button>
+
+    <!-- PRIVATE BALLOT: Shown once player confirms identity -->
+    <div id="votingBallot" style="display:none;">
+      <div style="text-align:center; margin-bottom:12px;">
+        <span style="font-size:0.8rem; color:#00ffff88; letter-spacing:2px;">BALLOT FOR:</span>
+        <div style="font-family:'Orbitron',sans-serif; color:#ffff00; font-size:1.15rem; font-weight:700;" id="currentVoterDisplay">PLAYER</div>
+        <div style="font-size:0.82rem; color:#aaa; margin-top:4px;">Who do you suspect is the Impostor?</div>
+      </div>
+
+      <div id="candidateButtons"></div>
+
+      <button class="btn btn-danger" id="confirmVoteBtn" onclick="submitCurrentVote()" disabled style="margin-top:14px;">
+        🔒 SELECT A PLAYER TO VOTE
+      </button>
+    </div>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════
-     SCREEN 5: RESULT
+     SCREEN 5: RESULTS & WINNERS
 ═══════════════════════════════════════════ -->
 <div id="resultScreen" class="screen">
   <div class="glass" style="text-align:center;">
     <span class="result-emoji" id="resultEmoji">🏆</span>
-    <div class="logo" style="font-size:1.6rem;" id="resultTitle">CREW WINS!</div>
-    <div style="color:#aaa; font-size:0.95rem; margin:16px 0; line-height:1.6;" id="resultDesc"></div>
+    <div class="logo" style="font-size:1.6rem;" id="resultTitle">ROUND COMPLETE</div>
+    <div style="color:#ddd; font-size:0.95rem; margin:10px 0; line-height:1.5;" id="resultDesc"></div>
 
-    <div style="background:rgba(255,255,255,0.05); border-radius:12px; padding:14px; margin:14px 0; font-size:0.88rem; line-height:2;" id="roleRevealBox"></div>
+    <!-- WINNERS BOX: Highlights players who got the right vote -->
+    <div class="winner-box" id="winnerBox">
+      <div style="font-family:'Orbitron',sans-serif; font-size:0.9rem; color:#ffd700; letter-spacing:2px; font-weight:900; margin-bottom:6px;">
+        👑 ROUND WINNERS (CORRECT VOTES)
+      </div>
+      <div id="winnerList"></div>
+      <div style="font-size:0.78rem; color:#ffd700aa; margin-top:8px;" id="winnerSub">
+        These players correctly detected the Impostor!
+      </div>
+    </div>
 
-    <button class="btn btn-primary" onclick="playAgain()">🔄 Play Again</button>
+    <!-- VOTE BREAKDOWN LEDGER -->
+    <div style="text-align:left; font-size:0.8rem; color:#00ffff88; letter-spacing:2px; margin-top:12px;">
+      📊 OFFICIAL VOTE BREAKDOWN:
+    </div>
+    <div class="vote-breakdown" id="voteBreakdownList"></div>
+
+    <!-- SECRET WORDS & ROLES REVEAL -->
+    <div style="text-align:left; font-size:0.8rem; color:#00ffff88; letter-spacing:2px; margin-top:10px;">
+      🔍 SECRET WORDS & ROLES REVEALED:
+    </div>
+    <div style="background:rgba(255,255,255,0.05); border-radius:12px; padding:12px; margin:8px 0 16px; font-size:0.88rem; line-height:1.8; text-align:left;" id="roleRevealBox"></div>
+
+    <button class="btn btn-primary" onclick="playAgain()">🔄 Play Again (New Words)</button>
     <button class="btn btn-secondary" onclick="backToLobby()">🏠 Back to Lobby</button>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════
-     MODAL: WELCOME / RULES (auto-shows on load)
+     MODAL: WELCOME / RULES BRIEFING
 ═══════════════════════════════════════════ -->
 <div class="modal-overlay" id="rulesModal">
   <div class="modal-box">
-
-    <!-- Animated header -->
     <div style="text-align:center; margin-bottom:6px;">
-      <div style="font-size:2.8rem; animation:float 2s ease-in-out infinite;">☠️</div>
-      <div style="font-family:'Orbitron',sans-serif; font-size:1.5rem; font-weight:900;
+      <div style="font-size:2.6rem; animation:float 2s ease-in-out infinite;">☠️</div>
+      <div style="font-family:'Orbitron',sans-serif; font-size:1.4rem; font-weight:900;
                   background:linear-gradient(135deg,#00ffff,#ff00ff,#ffff00);
                   -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-                  background-clip:text; margin:6px 0;">
+                  background-clip:text; margin:4px 0;">
         IMPOSTOR
       </div>
-      <div style="font-size:0.75rem; color:#00ffff88; letter-spacing:3px; text-transform:uppercase; margin-bottom:16px;">
+      <div style="font-size:0.75rem; color:#00ffff88; letter-spacing:3px; text-transform:uppercase; margin-bottom:14px;">
         ⚡ Cyber Space Edition ⚡
       </div>
     </div>
 
-    <div class="modal-title" style="font-size:1rem; margin-bottom:14px;">
-      📋 MISSION BRIEFING
-    </div>
+    <div class="modal-title">📋 MISSION BRIEFING & RULES</div>
 
-    <!-- Rules -->
     <div class="modal-rule">
       <span class="rule-num">01</span>
-      <span>All players sit together. One person is the <b style="color:#00ffff">Game Master</b> who holds the phone and enters names.</span>
+      <span><b>Pass the Phone:</b> Each player privately taps to see their secret word. <b style="color:#ffff00">Nobody knows their own role!</b></span>
     </div>
     <div class="modal-rule">
       <span class="rule-num">02</span>
-      <span>The phone is passed to each player privately. They tap to see their secret role.</span>
+      <span>
+        <b style="color:#00ffff">🚀 Crew:</b> Receives the shared real word.<br>
+        <b style="color:#ff0040">🔪 Impostor:</b> Secretly gets a totally random word from a different category! No pattern!
+      </span>
     </div>
     <div class="modal-rule">
       <span class="rule-num">03</span>
-      <span>
-        <b style="color:#00ffff">🚀 Crew</b> — gets the real word (e.g. <i>"Pizza"</i>).<br>
-        <b style="color:#ff0040">🔪 Impostor</b> — gets a fake similar word (e.g. <i>"Burger"</i>).<br>
-        <b style="color:#ffaa00">🤡 Jester</b> — gets NO word. Wants to be ejected!
-      </span>
+      <span><b>Discussion:</b> Each player gives <b>ONE clue</b> about their word. Listen for who sounds weirdly out of place!</span>
     </div>
     <div class="modal-rule">
       <span class="rule-num">04</span>
-      <span>During discussion, each player gives <b>ONE clue</b> about their word — without saying it directly!</span>
+      <span><b>🗳️ Every Player Votes:</b> When discussion ends, pass the phone around so <b>each and every player privately casts their vote</b> for who they suspect!</span>
     </div>
     <div class="modal-rule">
       <span class="rule-num">05</span>
-      <span>Vote to eject the most suspicious player. Most votes = <b>launched into space 🚀</b></span>
-    </div>
-    <div class="modal-rule">
-      <span class="rule-num">06</span>
-      <span>
-        <b style="color:#00ffff">Crew wins</b> → eject the Impostor 🎉<br>
-        <b style="color:#ff0040">Impostor wins</b> → stay hidden till the end 😈<br>
-        <b style="color:#ffaa00">Jester wins</b> → trick everyone into ejecting you 🤡
+      <span><b>👑 Who Wins?</b><br>
+        • <b style="color:#ffd700">Right Voters Win:</b> <b>Any player who correctly votes for the real Impostor WINS the round!</b> 🎯<br>
+        • <b style="color:#ff0040">Impostor Wins:</b> If the Impostor escapes getting majority votes, the Impostor wins! 😈<br>
+        • <b style="color:#ffaa00">Jester Wins:</b> (4+ players) If the Jester tricks everyone into voting them out! 🤡
       </span>
     </div>
     <div class="modal-rule">
-      <span class="rule-num">07</span>
-      <span>Use <b>Sus-O-Meter 💓</b> & <b>Emergency Meeting 🚨</b> for extra drama!</span>
+      <span class="rule-num">06</span>
+      <span><b>🚀 Airlock Ejection:</b> The player with the most votes is launched into deep space with full warp-speed visual effects!</span>
     </div>
 
-    <hr style="border:none; border-top:1px solid rgba(0,255,255,0.15); margin:18px 0;">
+    <hr style="border:none; border-top:1px solid rgba(0,255,255,0.15); margin:16px 0;">
 
-    <!-- CTA -->
     <button class="btn btn-primary" onclick="closeRulesModal()">
       🚀 LET'S PLAY — ENTER LOBBY
     </button>
-    <p style="text-align:center; font-size:0.72rem; color:rgba(255,255,255,0.25); margin-top:10px;">
-      Tap the 📋 button in the lobby to read rules again anytime
-    </p>
   </div>
 </div>
 
@@ -685,15 +800,15 @@
 <div class="modal-overlay" id="susMeterModal">
   <div class="modal-box">
     <div class="modal-title">💓 BIOMETRIC SUS-O-METER</div>
-    <div style="text-align:center; font-size:0.85rem; color:#aaa; margin-bottom:16px;">
-      Select a player for suspicion scan...
+    <div style="text-align:center; font-size:0.85rem; color:#aaa; margin-bottom:14px;">
+      Select a suspect for biometric scan...
     </div>
-    <select id="susPlayerSelect" style="margin-bottom:16px;"></select>
-    <button class="btn btn-danger" onclick="runSusScan()">🔍 RUN SCAN</button>
+    <select id="susPlayerSelect" style="margin-bottom:14px;"></select>
+    <button class="btn btn-danger" onclick="runSusScan()">🔍 RUN SUS SCAN</button>
     <div id="susResult" style="display:none; margin-top:16px;">
-      <div style="font-size:0.88rem; color:#aaa; margin-bottom:6px;">SUSPICION LEVEL:</div>
+      <div style="font-size:0.85rem; color:#aaa; margin-bottom:6px;">SUSPICION LEVEL:</div>
       <div class="sus-bar-bg"><div class="sus-bar-fill" id="susBarFill"></div></div>
-      <div id="susVerdict" style="text-align:center; font-family:'Orbitron',sans-serif; font-size:1rem; margin-top:8px;"></div>
+      <div id="susVerdict" style="text-align:center; font-family:'Orbitron',sans-serif; font-size:0.95rem; margin-top:8px;"></div>
       <svg id="heartbeatSvg" viewBox="0 0 300 60">
         <polyline id="hbLine" class="hb-line" points="0,30 40,30 55,5 70,55 85,30 120,30 135,15 150,45 165,30 200,30 215,10 230,50 245,30 300,30"/>
       </svg>
@@ -707,8 +822,8 @@
 ═══════════════════════════════════════════ -->
 <div class="emergency-overlay" id="emergencyOverlay">
   <div class="emergency-text">⚠ EMERGENCY<br>MEETING ⚠</div>
-  <div style="font-size:1.2rem; color:#ff6644; margin-top:20px; font-family:'Orbitron',sans-serif;">REPORT CALLED</div>
-  <button class="btn btn-danger" style="max-width:260px; margin-top:30px;" onclick="closeEmergency()">
+  <div style="font-size:1.15rem; color:#ff6644; margin-top:16px; font-family:'Orbitron',sans-serif;">KLAXON ALARM ACTIVE</div>
+  <button class="btn btn-danger" style="max-width:280px; margin-top:26px;" onclick="closeEmergency()">
     ENTER MEETING ROOM
   </button>
 </div>
@@ -720,7 +835,7 @@
 
 <script>
 // ═══════════════════════════════════════════════════════════
-//  PART 1: EPIC BACKGROUND ENGINE
+//  PART 1: BACKGROUND ENGINE (Nebula + Stars + Meteors)
 // ═══════════════════════════════════════════════════════════
 
 const bgCanvas = document.getElementById('bgCanvas');
@@ -735,7 +850,6 @@ function resizeBg() {
   bgH = bgCanvas.height = window.innerHeight;
 }
 
-// ── Stars (with twinkle)
 function initStars() {
   stars = [];
   for (let i = 0; i < 200; i++) {
@@ -746,12 +860,11 @@ function initStars() {
       opacity: Math.random(),
       twinkleSpeed: Math.random() * 0.03 + 0.005,
       twinkleDir: Math.random() > 0.5 ? 1 : -1,
-      hue: Math.random() > 0.8 ? (Math.random() > 0.5 ? 180 : 300) : 0 // cyan/purple tinted
+      hue: Math.random() > 0.8 ? (Math.random() > 0.5 ? 180 : 300) : 0
     });
   }
 }
 
-// ── Meteor class
 class Meteor {
   constructor() { this.reset(); }
   reset() {
@@ -781,13 +894,9 @@ class Meteor {
     ctx.strokeStyle = grd;
     ctx.lineWidth = this.width;
     ctx.moveTo(this.x, this.y);
-    ctx.lineTo(
-      this.x - Math.cos(this.angle) * this.len,
-      this.y - Math.sin(this.angle) * this.len
-    );
+    ctx.lineTo(this.x - Math.cos(this.angle) * this.len, this.y - Math.sin(this.angle) * this.len);
     ctx.stroke();
 
-    // Glowing head
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.width + 1, 0, Math.PI * 2);
     ctx.fillStyle = this.color;
@@ -798,7 +907,6 @@ class Meteor {
   }
 }
 
-// ── Nebula cloud blob
 class NebulaCloud {
   constructor() {
     this.x = Math.random() * bgW;
@@ -833,7 +941,6 @@ class NebulaCloud {
   }
 }
 
-// ── Supernova burst
 class Supernova {
   constructor() {
     this.x = Math.random() * bgW;
@@ -871,7 +978,6 @@ function initBg() {
 function drawBackground() {
   bgCtx.clearRect(0, 0, bgW, bgH);
 
-  // ── Deep space gradient base
   if (isEmergencyMode) {
     const base = bgCtx.createRadialGradient(bgW/2, bgH/2, 0, bgW/2, bgH/2, bgH);
     base.addColorStop(0, '#1a0008');
@@ -889,16 +995,15 @@ function drawBackground() {
     bgCtx.fillRect(0, 0, bgW, bgH);
   }
 
-  // ── Nebula clouds
   nebulaClouds.forEach(n => n.draw(bgCtx, bgTime));
 
-  // ── Planet silhouette (bottom right)
+  // Planet with ring in bottom corner
   const pX = bgW * 0.88, pY = bgH * 0.85, pR = Math.min(bgW, bgH) * 0.22;
   bgCtx.beginPath();
   bgCtx.arc(pX, pY, pR, 0, Math.PI * 2);
   bgCtx.fillStyle = '#000611';
   bgCtx.fill();
-  // Planet ring glow
+
   const pgrd = bgCtx.createRadialGradient(pX, pY, pR * 0.85, pX, pY, pR * 1.15);
   pgrd.addColorStop(0, 'rgba(0,180,255,0.0)');
   pgrd.addColorStop(0.5, 'rgba(0,180,255,0.12)');
@@ -907,7 +1012,7 @@ function drawBackground() {
   bgCtx.arc(pX, pY, pR * 1.12, 0, Math.PI * 2);
   bgCtx.fillStyle = pgrd;
   bgCtx.fill();
-  // Ring line
+
   bgCtx.save();
   bgCtx.translate(pX, pY);
   bgCtx.scale(1, 0.25);
@@ -918,7 +1023,7 @@ function drawBackground() {
   bgCtx.stroke();
   bgCtx.restore();
 
-  // ── Twinkling stars
+  // Twinkling stars
   stars.forEach(s => {
     s.opacity += s.twinkleSpeed * s.twinkleDir;
     if (s.opacity >= 1) s.twinkleDir = -1;
@@ -935,7 +1040,6 @@ function drawBackground() {
     }
     bgCtx.fill();
 
-    // Occasional cross-flare on bright stars
     if (s.r > 1.4 && s.opacity > 0.7) {
       bgCtx.strokeStyle = `rgba(255,255,255,${s.opacity * 0.3})`;
       bgCtx.lineWidth = 0.5;
@@ -948,14 +1052,11 @@ function drawBackground() {
     }
   });
 
-  // ── Meteors
   meteors.forEach(m => { m.update(); m.draw(bgCtx); });
 
-  // ── Supernovas
   supernovas = supernovas.filter(s => !s.done);
   supernovas.forEach(s => s.draw(bgCtx));
 
-  // ── Emergency red pulse overlay
   if (isEmergencyMode) {
     const pulse = (Math.sin(bgTime * 0.1) + 1) / 2;
     bgCtx.fillStyle = `rgba(255,0,0,${pulse * 0.12})`;
@@ -964,7 +1065,6 @@ function drawBackground() {
 
   bgTime++;
 
-  // Randomly spawn supernova
   if (Math.random() < 0.002 && supernovas.length < 4) {
     supernovas.push(new Supernova());
   }
@@ -973,38 +1073,45 @@ function drawBackground() {
 }
 
 // ═══════════════════════════════════════════════════════════
-//  PART 2: GAME DATA
+//  PART 2: GAME DATA (Randomized Categories & Words)
 // ═══════════════════════════════════════════════════════════
 
 const WORD_BANKS = {
-  food: [
-    ['Pizza','Burger'],['Sushi','Sashimi'],['Pasta','Noodles'],['Cake','Pie'],
-    ['Coffee','Tea'],['Chocolate','Caramel'],['Apple','Pear'],['Taco','Burrito']
-  ],
-  animals: [
-    ['Lion','Tiger'],['Dolphin','Shark'],['Eagle','Hawk'],['Elephant','Rhino'],
-    ['Penguin','Puffin'],['Wolf','Fox'],['Giraffe','Zebra'],['Crocodile','Alligator']
-  ],
-  tech: [
-    ['Laptop','Tablet'],['Google','Bing'],['Robot','Drone'],['Keyboard','Mouse'],
-    ['Internet','WiFi'],['Python','Java'],['iPhone','Android'],['Twitter','Instagram']
-  ],
-  movies: [
-    ['Avengers','Justice League'],['Batman','Superman'],['Titanic','Poseidon'],
-    ['Matrix','Inception'],['Frozen','Moana'],['Joker','Venom'],['Dune','Star Wars']
-  ],
-  sports: [
-    ['Football','Rugby'],['Cricket','Baseball'],['Tennis','Badminton'],['Swimming','Diving'],
-    ['Basketball','Volleyball'],['Boxing','MMA'],['Golf','Polo'],['Cycling','Running']
-  ],
-  places: [
-    ['Paris','Rome'],['Tokyo','Seoul'],['Amazon','Congo'],['Everest','K2'],
-    ['Dubai','Abu Dhabi'],['New York','Chicago'],['Australia','New Zealand']
-  ]
+  food:    ['Pizza','Sushi','Pasta','Mango','Waffle','Tacos','Ramen','Donut',
+            'Burger','Coffee','Biryani','Pancake','Noodles','Cheesecake','Popcorn','Samosa'],
+  animals: ['Lion','Dolphin','Eagle','Penguin','Elephant','Octopus','Cheetah','Flamingo',
+            'Cobra','Panda','Gorilla','Platypus','Kangaroo','Komodo','Narwhal','Axolotl'],
+  tech:    ['Laptop','Robot','Keyboard','Satellite','Blockchain','Hologram','Drone','Algorithm',
+            'Firewall','Processor','Quantum','Chatbot','Joystick','Scanner','Pixel','Antenna'],
+  movies:  ['Avengers','Batman','Titanic','Inception','Frozen','Joker','Dune','Interstellar',
+            'Parasite','Matrix','Moana','Venom','Avatar','Gladiator','Shrek','Jurassic'],
+  sports:  ['Football','Cricket','Tennis','Swimming','Basketball','Boxing','Golf','Cycling',
+            'Archery','Skateboard','Wrestling','Fencing','Surfing','Polo','Rowing','Badminton'],
+  places:  ['Paris','Tokyo','Amazon','Everest','Dubai','Antarctica','Sahara','Colosseum',
+            'Machu Picchu','Niagara','Bermuda','Silicon Valley','Vatican','Kilimanjaro','Bali','Venice']
 };
 
+function getOneWord(category) {
+  let list;
+  if (category === 'random') {
+    const cats = Object.keys(WORD_BANKS);
+    list = WORD_BANKS[cats[Math.floor(Math.random() * cats.length)]];
+  } else {
+    list = WORD_BANKS[category] || WORD_BANKS.food;
+  }
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+function getWordFromDifferentCategory(excludeCategory) {
+  const allCats = Object.keys(WORD_BANKS);
+  const otherCats = allCats.filter(c => c !== excludeCategory && c !== 'random');
+  const pickedCat = otherCats[Math.floor(Math.random() * otherCats.length)];
+  const list = WORD_BANKS[pickedCat];
+  return list[Math.floor(Math.random() * list.length)];
+}
+
 // ═══════════════════════════════════════════════════════════
-//  PART 3: PLAYER SLOT MANAGEMENT
+//  PART 3: PLAYER REGISTRATION
 // ═══════════════════════════════════════════════════════════
 
 let slotCount = 0;
@@ -1053,42 +1160,35 @@ function validatePlayers() {
     launchBtn.disabled = true;
   } else if (filledCount < totalSlots) {
     statusMsg.className = 'status-msg status-locked';
-    statusMsg.textContent = `🔒 ${totalSlots - filledCount} empty slot${totalSlots - filledCount > 1 ? 's' : ''} — fill all names`;
+    statusMsg.textContent = `🔒 ${totalSlots - filledCount} empty slot${totalSlots - filledCount > 1 ? 's' : ''} — enter all names`;
     launchBtn.disabled = true;
   } else {
     statusMsg.className = 'status-msg status-ready';
-    statusMsg.textContent = `✅ ${filledCount} crew members ready — LAUNCH!`;
+    statusMsg.textContent = `✅ ${filledCount} crew members ready — LAUNCH MISSION!`;
     launchBtn.disabled = false;
   }
 }
 
 // ═══════════════════════════════════════════════════════════
-//  PART 4: GAME STATE
+//  PART 4: GAME INITIALIZATION
 // ═══════════════════════════════════════════════════════════
 
 let players = [];
 let roles = {}; // { playerName: 'crew'|'impostor'|'jester' }
 let words = {}; // { playerName: word }
 let currentRevealIndex = 0;
-let votes = {};
 let discussionTimer;
 let gameCategory = 'random';
+
+// Voting state
+let playerVotes = {}; // voterName -> targetName
+let currentVoterIdx = 0;
+let selectedCandidate = null;
 
 function getPlayers() {
   return Array.from(document.querySelectorAll('.player-input'))
     .map(i => i.value.trim())
     .filter(n => n.length > 0);
-}
-
-function getWordPair(category) {
-  let bank;
-  if (category === 'random') {
-    const cats = Object.keys(WORD_BANKS);
-    bank = WORD_BANKS[cats[Math.floor(Math.random() * cats.length)]];
-  } else {
-    bank = WORD_BANKS[category] || WORD_BANKS.food;
-  }
-  return bank[Math.floor(Math.random() * bank.length)];
 }
 
 function assignRoles() {
@@ -1097,7 +1197,6 @@ function assignRoles() {
 
   const shuffled = [...players].sort(() => Math.random() - 0.5);
 
-  // Assign: 1 Impostor, 1 Jester if 4+ players, rest Crew
   let impostorIdx = Math.floor(Math.random() * shuffled.length);
   let jesterIdx = -1;
   if (shuffled.length >= 4) {
@@ -1105,7 +1204,9 @@ function assignRoles() {
     while (jesterIdx === impostorIdx);
   }
 
-  const [crewWord, impostorWord] = getWordPair(gameCategory);
+  const crewWord = getOneWord(gameCategory);
+  const impostorWord = getWordFromDifferentCategory(gameCategory === 'random' ? '' : gameCategory);
+  const jesterWord = getWordFromDifferentCategory(gameCategory === 'random' ? '' : gameCategory);
 
   roles = {};
   words = {};
@@ -1116,17 +1217,13 @@ function assignRoles() {
       words[p] = impostorWord;
     } else if (i === jesterIdx) {
       roles[p] = 'jester';
-      words[p] = '???'; // Jester doesn't know the word
+      words[p] = jesterWord;
     } else {
       roles[p] = 'crew';
       words[p] = crewWord;
     }
   });
 }
-
-// ═══════════════════════════════════════════════════════════
-//  PART 5: SCREEN NAVIGATION
-// ═══════════════════════════════════════════════════════════
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -1141,6 +1238,10 @@ function startGame() {
   playBeep(440, 0.1, 'sine');
 }
 
+// ═══════════════════════════════════════════════════════════
+//  PART 5: REVEAL PHASE (Secret & Neutral for All)
+// ═══════════════════════════════════════════════════════════
+
 function showRevealFor(index) {
   const player = players[index];
   document.getElementById('turnIndicator').textContent = `👤 ${player.toUpperCase()}'S TURN`;
@@ -1150,48 +1251,20 @@ function showRevealFor(index) {
 
 function flipCard() {
   const player = players[currentRevealIndex];
-  const role = roles[player];
   const word = words[player];
 
   document.getElementById('tapToReveal').style.display = 'none';
   document.getElementById('roleContent').style.display = 'block';
 
-  const card = document.getElementById('roleCard');
-  card.className = `role-card ${role}`;
-
-  const configs = {
-    crew: {
-      emoji: '🚀',
-      title: 'CREW MEMBER',
-      desc: 'You know the real word. Give a clue during discussion — but be subtle so the Impostor can\'t figure it out!',
-    },
-    impostor: {
-      emoji: '🔪',
-      title: 'IMPOSTOR',
-      desc: `Danger! Your word is DIFFERENT from the crew's. Blend in! Sound confident. If voted out — you LOSE.`,
-    },
-    jester: {
-      emoji: '🤡',
-      title: 'JESTER',
-      desc: `You have NO word. Act suspicious! If the crew votes YOU out — YOU WIN! Try to get ejected.`,
-    }
-  };
-
-  const cfg = configs[role];
-  document.getElementById('roleEmoji').textContent = cfg.emoji;
-  document.getElementById('roleTitle').textContent = cfg.title;
-  document.getElementById('roleTitle').className = `role-title ${role}`;
+  document.getElementById('roleEmoji').textContent = '🔐';
+  document.getElementById('roleTitle').textContent = 'YOUR SECRET WORD';
   document.getElementById('wordDisplay').textContent = word;
-  document.getElementById('roleDesc').textContent = cfg.desc;
+  document.getElementById('roleDesc').textContent =
+    'Remember this word. During discussion, give ONE clue about it without revealing it directly! ' +
+    'The Impostor has a completely different word — find them!';
 
-  if (role === 'impostor') {
-    playBeep(200, 0.15, 'sawtooth');
-    navigator.vibrate && navigator.vibrate([200,100,200,100,400]);
-  } else if (role === 'jester') {
-    playBeep(330, 0.1, 'triangle');
-  } else {
-    playBeep(550, 0.08, 'sine');
-  }
+  playBeep(520, 0.08, 'sine');
+  navigator.vibrate && navigator.vibrate(80);
 }
 
 function nextPlayer() {
@@ -1203,10 +1276,13 @@ function nextPlayer() {
   }
 }
 
+// ═══════════════════════════════════════════════════════════
+//  PART 6: DISCUSSION PHASE
+// ═══════════════════════════════════════════════════════════
+
 function startDiscussion() {
   showScreen('discussionScreen');
 
-  // Show shuffled player order
   const shuffledPlayers = [...players].sort(() => Math.random() - 0.5);
   const list = document.getElementById('playerOrderList');
   list.innerHTML = shuffledPlayers.map((p, i) =>
@@ -1216,7 +1292,6 @@ function startDiscussion() {
      </div>`
   ).join('');
 
-  // Countdown timer
   let time = 60;
   document.getElementById('discTimer').textContent = time;
   clearInterval(discussionTimer);
@@ -1231,77 +1306,219 @@ function startDiscussion() {
   }, 1000);
 }
 
+// ═══════════════════════════════════════════════════════════
+//  PART 7: TURN-BY-TURN PRIVATE VOTING (EVERYONE VOTES!)
+// ═══════════════════════════════════════════════════════════
+
 function goToVoting() {
   clearInterval(discussionTimer);
-  votes = {};
-  const container = document.getElementById('voteButtons');
-  container.innerHTML = players.map(p =>
-    `<button class="vote-btn" id="vote-${p}" onclick="castVote('${p}')">
-       ${ICONS[players.indexOf(p) % ICONS.length]} ${p}
-       <span class="vote-count" id="vc-${p}"></span>
-     </button>`
-  ).join('');
+  playerVotes = {};
+  currentVoterIdx = 0;
   showScreen('votingScreen');
-  playBeep(300, 0.1, 'triangle');
+  showVoterPrivacyScreen(0);
 }
 
-function castVote(playerName) {
-  // Simple: first vote determines ejected player
-  votes[playerName] = (votes[playerName] || 0) + 1;
-  const btn = document.getElementById(`vote-${playerName}`);
-  btn.classList.add('voted');
-  document.getElementById(`vc-${playerName}`).textContent = `● VOTED`;
+function showVoterPrivacyScreen(idx) {
+  selectedCandidate = null;
+  const voter = players[idx];
 
-  // Auto proceed after 1.5s
-  setTimeout(() => ejectPlayer(playerName), 1500);
+  document.getElementById('voterStepText').textContent = `VOTER ${idx + 1} OF ${players.length}`;
+  document.getElementById('voterTargetName').textContent = voter.toUpperCase();
+
+  document.getElementById('votingPrivacyGate').style.display = 'block';
+  document.getElementById('votingBallot').style.display = 'none';
+
+  playBeep(330, 0.1, 'triangle');
 }
 
-function skipVote() {
-  showResult('skip', null);
+function openPrivateBallot() {
+  const voter = players[currentVoterIdx];
+
+  document.getElementById('votingPrivacyGate').style.display = 'none';
+  document.getElementById('votingBallot').style.display = 'block';
+  document.getElementById('currentVoterDisplay').textContent = voter.toUpperCase();
+
+  const container = document.getElementById('candidateButtons');
+  // Show all OTHER players as voting candidates
+  container.innerHTML = players
+    .filter(p => p !== voter)
+    .map(p => `
+      <button class="candidate-btn" id="cand-${p}" onclick="selectCandidate('${p}')">
+        <span>${ICONS[players.indexOf(p) % ICONS.length]} ${p}</span>
+        <span class="candidate-check" id="check-${p}"></span>
+      </button>
+    `).join('');
+
+  const confirmBtn = document.getElementById('confirmVoteBtn');
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = '🔒 SELECT A PLAYER TO VOTE';
+  confirmBtn.className = 'btn btn-primary';
+
+  playBeep(480, 0.08, 'sine');
 }
 
-function ejectPlayer(ejected) {
-  clearInterval(discussionTimer);
-  triggerAirlock(ejected, () => {
-    showResult('ejected', ejected);
+function selectCandidate(candidateName) {
+  selectedCandidate = candidateName;
+
+  document.querySelectorAll('.candidate-btn').forEach(btn => btn.classList.remove('selected'));
+  document.querySelectorAll('.candidate-check').forEach(chk => chk.textContent = '');
+
+  const btn = document.getElementById(`cand-${candidateName}`);
+  if (btn) btn.classList.add('selected');
+  const chk = document.getElementById(`check-${candidateName}`);
+  if (chk) chk.textContent = '● ACCUSED';
+
+  const confirmBtn = document.getElementById('confirmVoteBtn');
+  confirmBtn.disabled = false;
+  confirmBtn.textContent = `🚨 SUBMIT VOTE: ACCUSE ${candidateName.toUpperCase()}`;
+  confirmBtn.className = 'btn btn-danger';
+
+  playBeep(580, 0.08, 'triangle');
+  navigator.vibrate && navigator.vibrate(50);
+}
+
+function submitCurrentVote() {
+  if (!selectedCandidate) return;
+
+  const voter = players[currentVoterIdx];
+  playerVotes[voter] = selectedCandidate;
+
+  playBeep(650, 0.12, 'sine');
+  navigator.vibrate && navigator.vibrate(80);
+
+  currentVoterIdx++;
+  if (currentVoterIdx < players.length) {
+    showVoterPrivacyScreen(currentVoterIdx);
+  } else {
+    finishAllVoting();
+  }
+}
+
+function finishAllVoting() {
+  // Tally all votes
+  const tally = {};
+  players.forEach(p => tally[p] = 0);
+  Object.values(playerVotes).forEach(target => {
+    tally[target] = (tally[target] || 0) + 1;
   });
+
+  // Find max votes
+  let maxCount = -1;
+  let mostVotedPlayers = [];
+  players.forEach(p => {
+    if (tally[p] > maxCount) {
+      maxCount = tally[p];
+      mostVotedPlayers = [p];
+    } else if (tally[p] === maxCount) {
+      mostVotedPlayers.push(p);
+    }
+  });
+
+  // Check for tie
+  if (mostVotedPlayers.length > 1) {
+    showResult('tie', null, tally);
+  } else {
+    const ejected = mostVotedPlayers[0];
+    triggerAirlock(ejected, () => {
+      showResult('ejected', ejected, tally);
+    });
+  }
 }
 
-function showResult(type, ejected) {
-  let emoji, title, desc, roleReveal = '';
-  const impostor = players.find(p => roles[p] === 'impostor');
-  const jester = players.find(p => roles[p] === 'jester');
+// ═══════════════════════════════════════════════════════════
+//  PART 8: RESULTS & WINNERS (RIGHT VOTERS WIN!)
+// ═══════════════════════════════════════════════════════════
+
+function showResult(type, ejected, tally) {
+  const realImpostor = players.find(p => roles[p] === 'impostor');
+  const realJester = players.find(p => roles[p] === 'jester');
   const ejectedRole = ejected ? roles[ejected] : null;
 
-  if (type === 'skip') {
-    emoji = '😅'; title = 'VOTE SKIPPED';
-    desc = `No one was ejected. The Impostor roams free...`;
+  // 🎯 Check who cast the RIGHT VOTE (voted for the real Impostor!)
+  const correctVoters = players.filter(p => playerVotes[p] === realImpostor);
+
+  let emoji, title, desc;
+
+  if (type === 'tie') {
+    emoji = '⚖️';
+    title = 'TIE VOTE — NO EJECTION!';
+    desc = `The crew was divided! No single player had majority votes. The Impostor escaped!`;
   } else if (ejectedRole === 'impostor') {
-    emoji = '🎉'; title = 'CREW WINS!';
-    desc = `${ejected} was the Impostor! The station is safe. 🚀`;
+    emoji = '🎉';
+    title = 'CREW CAUGHT THE IMPOSTOR!';
+    desc = `<b>${ejected}</b> was indeed the Impostor and has been launched into space! 🚀`;
   } else if (ejectedRole === 'jester') {
-    emoji = '🤡'; title = 'JESTER WINS!';
-    desc = `${ejected} was the Jester and wanted to be ejected! 🎭 Everyone else loses!`;
+    emoji = '🤡';
+    title = 'JESTER OUTSMARTED EVERYONE!';
+    desc = `<b>${ejected}</b> was the Jester! They tricked everyone into ejecting them! 🎭`;
   } else {
-    emoji = '😈'; title = 'IMPOSTOR WINS!';
-    desc = `${ejected} was innocent! The Impostor ${impostor} survives and wins! 🔪`;
+    emoji = '💔';
+    title = 'INNOCENT CREW EJECTED!';
+    desc = `<b>${ejected}</b> was innocent! The real Impostor (<b>${realImpostor}</b>) escaped detection! 🔪`;
   }
 
-  // Role reveal for all players
-  roleReveal = players.map(p => {
+  // Populate WINNERS BOX
+  const winnerListEl = document.getElementById('winnerList');
+  const winnerSubEl = document.getElementById('winnerSub');
+
+  let winnerPillsHtml = '';
+
+  if (correctVoters.length > 0) {
+    winnerPillsHtml = correctVoters
+      .map(p => `<span class="winner-pill">⭐ ${p} (Correct Vote)</span>`)
+      .join(' ');
+    winnerSubEl.textContent = `🎯 These players made the RIGHT vote and accurately detected ${realImpostor}!`;
+  } else {
+    winnerPillsHtml = `<span style="color:#ff6644; font-size:0.95rem;">Nobody voted for the Impostor!</span>`;
+    winnerSubEl.textContent = `The Impostor outplayed the entire crew!`;
+  }
+
+  // If Impostor survived, they also win
+  if (ejectedRole !== 'impostor' && type !== 'tie') {
+    winnerPillsHtml += ` <span class="winner-pill" style="background:linear-gradient(135deg,#ff0040,#ff6600); color:#fff;">🔪 ${realImpostor} (Survived)</span>`;
+  } else if (ejectedRole === 'jester') {
+    winnerPillsHtml = `<span class="winner-pill" style="background:linear-gradient(135deg,#ffaa00,#ff4400); color:#000;">🤡 ${realJester} (Tricked Everyone)</span>`;
+    winnerSubEl.textContent = `The Jester successfully baited the crew into an ejection!`;
+  }
+
+  winnerListEl.innerHTML = winnerPillsHtml;
+
+  // Populate Vote Breakdown Ledger
+  const breakdownEl = document.getElementById('voteBreakdownList');
+  breakdownEl.innerHTML = players.map(p => {
+    const target = playerVotes[p];
+    const isCorrect = (target === realImpostor);
+    const badge = isCorrect
+      ? `<span class="vote-correct">🎯 Accused ${target} (RIGHT! WINNER)</span>`
+      : `<span class="vote-wrong">Accused ${target} (Wrong)</span>`;
+
+    return `
+      <div class="vote-row">
+        <span><b>${p}</b> voted for:</span>
+        ${badge}
+      </div>
+    `;
+  }).join('');
+
+  // Populate Role & Words Reveal
+  const roleRevealEl = document.getElementById('roleRevealBox');
+  roleRevealEl.innerHTML = players.map(p => {
     const r = roles[p];
     const icon = r === 'impostor' ? '🔪' : r === 'jester' ? '🤡' : '🚀';
-    const w = words[p];
-    return `${icon} <b>${p}</b>: ${r.toUpperCase()} ${r !== 'jester' ? `— "${w}"` : ''}`;
+    const tag = r === 'impostor'
+      ? '<span style="color:#ff0040; font-weight:700;">[IMPOSTOR]</span>'
+      : r === 'jester'
+      ? '<span style="color:#ffaa00; font-weight:700;">[JESTER]</span>'
+      : '<span style="color:#00ffff; font-weight:700;">[CREW]</span>';
+    return `${icon} <b>${p}</b>: ${tag} — Word: <b>"${words[p]}"</b>`;
   }).join('<br>');
 
   document.getElementById('resultEmoji').textContent = emoji;
   document.getElementById('resultTitle').textContent = title;
-  document.getElementById('resultDesc').textContent = desc;
-  document.getElementById('roleRevealBox').innerHTML = roleReveal;
+  document.getElementById('resultDesc').innerHTML = desc;
 
   showScreen('resultScreen');
-  playBeep(ejectedRole === 'impostor' ? 880 : 220, 0.2, 'sine');
+  playBeep(correctVoters.length > 0 ? 880 : 220, 0.25, 'sine');
 }
 
 function playAgain() {
@@ -1317,7 +1534,7 @@ function backToLobby() {
 }
 
 // ═══════════════════════════════════════════════════════════
-//  PART 6: MODALS
+//  PART 9: MODALS & TOOLS
 // ═══════════════════════════════════════════════════════════
 
 function openRulesModal() {
@@ -1343,28 +1560,23 @@ function runSusScan() {
   const player = document.getElementById('susPlayerSelect').value;
   const pct = Math.floor(Math.random() * 100);
   const verdicts = [
-    [0,  30,  '💚 CLEAN — Probably innocent'],
-    [30, 60,  '💛 SKETCHY — Seems nervous...'],
-    [60, 80,  '🟠 VERY SUS — Acting weird!'],
-    [80, 101, '🔴 IMPOSTOR DETECTED — 100% sus!']
+    [0,  30,  '💚 CLEAN — Low suspicion biometric signature'],
+    [30, 60,  '💛 SKETCHY — Heart rate elevated!'],
+    [60, 80,  '🟠 VERY SUS — Anomaly detected in voice stress!'],
+    [80, 101, '🔴 CRITICAL SUS — Biometrics match IMPOSTOR!']
   ];
   const [,, text] = verdicts.find(([lo, hi]) => pct >= lo && pct < hi);
 
   document.getElementById('susResult').style.display = 'block';
   document.getElementById('susVerdict').textContent = `${player}: ${pct}% — ${text}`;
 
-  // Animate bar after render
   setTimeout(() => {
     document.getElementById('susBarFill').style.width = pct + '%';
   }, 100);
 
-  playBeep(300 + pct * 3, 0.1, 'sawtooth');
+  playBeep(320 + pct * 3, 0.1, 'sawtooth');
   navigator.vibrate && navigator.vibrate(pct > 80 ? [300,100,300] : [100]);
 }
-
-// ═══════════════════════════════════════════════════════════
-//  PART 7: EMERGENCY MEETING
-// ═══════════════════════════════════════════════════════════
 
 function triggerEmergency() {
   clearInterval(discussionTimer);
@@ -1380,10 +1592,6 @@ function closeEmergency() {
   goToVoting();
 }
 
-// ═══════════════════════════════════════════════════════════
-//  PART 8: AIRLOCK EJECTION
-// ═══════════════════════════════════════════════════════════
-
 function triggerAirlock(playerName, callback) {
   const canvas = document.getElementById('airlockCanvas');
   canvas.classList.add('active');
@@ -1392,14 +1600,12 @@ function triggerAirlock(playerName, callback) {
   canvas.height = bgH;
 
   let frame = 0;
-  let warpStars = Array.from({length: 80}, () => ({
+  let warpStars = Array.from({length: 90}, () => ({
     x: bgW/2 + (Math.random()-0.5)*200,
     y: bgH/2 + (Math.random()-0.5)*200,
     angle: Math.random() * Math.PI * 2,
     speed: 1
   }));
-  let textOpacity = 1;
-  let ejecting = false;
   let ejectY = bgH / 2;
   let ejectOpacity = 1;
 
@@ -1408,22 +1614,18 @@ function triggerAirlock(playerName, callback) {
     ctx.fillStyle = 'rgba(0,0,0,0.85)';
     ctx.fillRect(0, 0, bgW, bgH);
 
-    // Warp-speed stars
     warpStars.forEach(s => {
-      s.speed += 0.25;
-      const len = s.speed * 3;
-      ctx.strokeStyle = `rgba(0,255,255,${Math.min(s.speed / 20, 0.8)})`;
-      ctx.lineWidth = 1;
+      s.speed += 0.28;
+      const len = s.speed * 3.2;
+      ctx.strokeStyle = `rgba(0,255,255,${Math.min(s.speed / 18, 0.85)})`;
+      ctx.lineWidth = 1.2;
       ctx.beginPath();
       ctx.moveTo(s.x, s.y);
-      ctx.lineTo(
-        s.x + Math.cos(s.angle) * len,
-        s.y + Math.sin(s.angle) * len
-      );
+      ctx.lineTo(s.x + Math.cos(s.angle) * len, s.y + Math.sin(s.angle) * len);
       ctx.stroke();
 
-      s.x += Math.cos(s.angle) * s.speed * 0.5;
-      s.y += Math.sin(s.angle) * s.speed * 0.5;
+      s.x += Math.cos(s.angle) * s.speed * 0.55;
+      s.y += Math.sin(s.angle) * s.speed * 0.55;
 
       if (s.x < 0 || s.x > bgW || s.y < 0 || s.y > bgH) {
         s.x = bgW/2 + (Math.random()-0.5)*50;
@@ -1432,19 +1634,17 @@ function triggerAirlock(playerName, callback) {
       }
     });
 
-    // Ejected player label
-    if (frame < 40) {
+    if (frame < 45) {
       ctx.fillStyle = `rgba(255,255,255,${ejectOpacity})`;
-      ctx.font = `bold ${Math.min(bgW * 0.08, 40)}px Orbitron, sans-serif`;
+      ctx.font = `bold ${Math.min(bgW * 0.08, 42)}px Orbitron, sans-serif`;
       ctx.textAlign = 'center';
       ctx.fillText(`${playerName}`, bgW/2, ejectY);
-      ejectY -= 3;
+      ejectY -= 3.2;
       ejectOpacity -= 0.02;
     }
 
-    // "EJECTED" text
     if (frame > 15) {
-      ctx.fillStyle = `rgba(255,0,64,${textOpacity})`;
+      ctx.fillStyle = '#ff0040';
       ctx.font = `900 ${Math.min(bgW * 0.12, 60)}px Orbitron, sans-serif`;
       ctx.textAlign = 'center';
       ctx.shadowColor = '#ff0040';
@@ -1468,11 +1668,10 @@ function triggerAirlock(playerName, callback) {
 }
 
 // ═══════════════════════════════════════════════════════════
-//  PART 9: AUDIO ENGINE
+//  PART 10: SYNTHESIZED SOUND FX
 // ═══════════════════════════════════════════════════════════
 
 let audioCtx;
-
 function getAudioCtx() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   return audioCtx;
@@ -1533,26 +1732,26 @@ function playEjectSound() {
 }
 
 // ═══════════════════════════════════════════════════════════
-//  PART 10: INIT
+//  PART 11: INITIALIZATION
 // ═══════════════════════════════════════════════════════════
 
 initBg();
 drawBackground();
 
-// Start with 3 blank slots
+// Start with 3 empty input slots for custom names
 addPlayerSlot();
 addPlayerSlot();
 addPlayerSlot();
 
-// ── AUTO-SHOW MISSION BRIEFING on page load
+// Auto-show Mission Briefing on startup
 window.addEventListener('load', () => {
   setTimeout(() => {
     document.getElementById('rulesModal').classList.add('open');
     playBeep(440, 0.3, 'sine');
-  }, 600); // slight delay so background finishes loading nicely
+  }, 600);
 });
 
-console.log('🚀 IMPOSTOR: Cyber Space Edition — Loaded!');
+console.log('🚀 IMPOSTOR: Cyber Space Edition — Loaded with Secret Ballot Voting & Right-Vote Winner System!');
 </script>
 </body>
 </html>
