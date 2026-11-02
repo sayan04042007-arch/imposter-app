@@ -1,649 +1,1493 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Impostor: Space Deduction</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>IMPOSTOR: Cyber Space Edition</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
 
-  <style>
-    :root {
-      --bg-dark: #080a10;
-      --bg-card: #121624;
-      --crew-cyan: #00f2fe;
-      --impostor-red: #ff3366;
-      --gold: #ffbe0b;
-      --text-main: #f8fafc;
-      --text-dim: #94a3b8;
-      --font-display: 'Orbitron', sans-serif;
-      --font-body: 'Plus Jakarta Sans', sans-serif;
-    }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
+  body {
+    font-family: 'Rajdhani', sans-serif;
+    background: #000;
+    color: #fff;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
 
-    body {
-      font-family: var(--font-body);
-      background: var(--bg-dark);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow-x: hidden;
-      background-image: 
-        radial-gradient(circle at 20% 20%, rgba(0, 242, 254, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 80% 80%, rgba(255, 51, 102, 0.08) 0%, transparent 40%);
-    }
+  #bgCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+  }
 
-    /* Mobile Container Frame */
-    .game-container {
-      width: 100%;
-      max-width: 440px;
-      min-height: 100vh;
-      background: var(--bg-dark);
-      padding: 24px 20px;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
+  .screen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    padding: 20px;
+  }
+  .screen.active { display: flex; }
 
-    /* Screen Titles */
-    .title-banner {
-      text-align: center;
-      margin-bottom: 24px;
-    }
+  /* ===== GLASS CARD ===== */
+  .glass {
+    background: rgba(0,20,40,0.75);
+    border: 1px solid rgba(0,255,255,0.25);
+    border-radius: 20px;
+    backdrop-filter: blur(18px);
+    box-shadow: 0 0 40px rgba(0,255,255,0.15), inset 0 0 30px rgba(0,0,0,0.3);
+    padding: 30px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
 
-    .title-banner h1 {
-      font-family: var(--font-display);
-      font-size: 2rem;
-      letter-spacing: 2px;
-      background: linear-gradient(135deg, #00f2fe 0%, #ff3366 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
-    }
+  /* ===== LOGO / TITLE ===== */
+  .logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.6rem, 5vw, 2.8rem);
+    font-weight: 900;
+    text-align: center;
+    background: linear-gradient(135deg, #00ffff, #ff00ff, #ffff00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    margin-bottom: 4px;
+    animation: logoPulse 3s ease-in-out infinite;
+  }
+  @keyframes logoPulse {
+    0%,100% { filter: drop-shadow(0 0 8px #00ffff88); }
+    50% { filter: drop-shadow(0 0 22px #ff00ff88); }
+  }
 
-    .title-banner p {
-      font-size: 0.85rem;
-      color: var(--text-dim);
-      margin-top: 4px;
-    }
+  .subtitle {
+    text-align: center;
+    color: #00ffff88;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
 
-    /* General Cards */
-    .card {
-      background: var(--bg-card);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 18px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    }
+  /* ===== PLAYER SLOTS ===== */
+  .player-slot {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    animation: slideIn 0.4s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
 
-    .card h3 {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--crew-cyan);
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
+  .slot-icon {
+    font-size: 1.4rem;
+    width: 36px;
+    text-align: center;
+  }
 
-    /* Player Chips */
-    .players-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
+  .player-input {
+    flex: 1;
+    background: rgba(0,255,255,0.07);
+    border: 1px solid rgba(0,255,255,0.3);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    outline: none;
+    transition: all 0.3s;
+  }
+  .player-input:focus {
+    border-color: #00ffff;
+    box-shadow: 0 0 15px rgba(0,255,255,0.3);
+    background: rgba(0,255,255,0.12);
+  }
+  .player-input::placeholder { color: rgba(255,255,255,0.3); }
+  .player-input.filled { border-color: #00ff88; box-shadow: 0 0 10px rgba(0,255,136,0.3); }
 
-    .player-tag {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+  /* ===== BUTTONS ===== */
+  .btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 6px 0;
+    transition: all 0.3s;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 0; height: 0;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    transform: translate(-50%,-50%);
+    transition: width 0.5s, height 0.5s;
+  }
+  .btn:active::after { width: 300px; height: 300px; }
 
-    .player-input-row {
-      display: flex;
-      gap: 8px;
-    }
+  .btn-primary {
+    background: linear-gradient(135deg, #00ffff, #0088ff);
+    color: #000;
+    box-shadow: 0 0 20px rgba(0,255,255,0.4);
+  }
+  .btn-primary:hover:not(:disabled) { box-shadow: 0 0 35px rgba(0,255,255,0.7); transform: translateY(-2px); }
+  .btn-primary:disabled {
+    background: linear-gradient(135deg, #334, #223);
+    color: #556;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
 
-    input[type="text"] {
-      flex: 1;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 10px;
-      padding: 10px 14px;
-      color: #fff;
-      font-size: 0.9rem;
-      outline: none;
-    }
-    input[type="text"]:focus {
-      border-color: var(--crew-cyan);
-    }
+  .btn-danger {
+    background: linear-gradient(135deg, #ff0040, #ff6600);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(255,0,64,0.4);
+  }
+  .btn-danger:hover { box-shadow: 0 0 35px rgba(255,0,64,0.7); transform: translateY(-2px); }
 
-    select {
-      width: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 10px;
-      padding: 10px 14px;
-      color: #fff;
-      font-size: 0.9rem;
-      outline: none;
-    }
+  .btn-secondary {
+    background: rgba(255,255,255,0.08);
+    color: #aaa;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.14); color: #fff; }
 
-    /* Buttons */
-    .btn {
-      width: 100%;
-      padding: 15px;
-      border-radius: 14px;
-      border: none;
-      font-family: var(--font-display);
-      font-size: 1rem;
-      font-weight: 800;
-      letter-spacing: 1px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-      color: #080a10;
-      box-shadow: 0 4px 20px rgba(0, 242, 254, 0.4);
-    }
-    .btn-danger {
-      background: linear-gradient(135deg, #ff3366 0%, #ff0844 100%);
-      color: #fff;
-      box-shadow: 0 4px 20px rgba(255, 51, 102, 0.4);
-    }
-    .btn:active {
-      transform: scale(0.98);
-    }
+  .btn-ghost {
+    background: transparent;
+    color: #00ffff99;
+    border: 1px solid rgba(0,255,255,0.25);
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+  .btn-ghost:hover { color: #00ffff; border-color: #00ffff; }
 
-    /* Secret Card Reveal UI */
-    .reveal-card {
-      background: var(--bg-card);
-      border: 2px dashed rgba(255, 255, 255, 0.2);
-      border-radius: 20px;
-      padding: 40px 20px;
-      text-align: center;
-      cursor: pointer;
-      user-select: none;
-      margin: 20px 0;
-      transition: all 0.3s;
-    }
+  /* ===== STATUS TEXT ===== */
+  .status-msg {
+    text-align: center;
+    font-size: 0.82rem;
+    margin: 8px 0;
+    letter-spacing: 1px;
+    min-height: 20px;
+    transition: all 0.3s;
+  }
+  .status-locked { color: #ff6644; }
+  .status-ready { color: #00ff88; animation: readyPulse 1s ease-in-out infinite; }
+  @keyframes readyPulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
 
-    .reveal-card.revealed {
-      border-style: solid;
-      border-color: var(--crew-cyan);
-      box-shadow: 0 0 30px rgba(0, 242, 254, 0.25);
-    }
+  /* ===== SELECT ===== */
+  .select-label {
+    font-size: 0.8rem;
+    color: #00ffff88;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 16px 0 8px;
+  }
+  select {
+    width: 100%;
+    background: rgba(0,255,255,0.07);
+    border: 1px solid rgba(0,255,255,0.3);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+    margin-bottom: 8px;
+  }
+  select option { background: #001122; color: #fff; }
 
-    .role-badge {
-      font-family: var(--font-display);
-      font-size: 1.8rem;
-      font-weight: 900;
-      margin: 12px 0 6px;
-    }
-    .role-impostor { color: var(--impostor-red); text-shadow: 0 0 20px rgba(255, 51, 102, 0.6); }
-    .role-crewmate { color: var(--crew-cyan); text-shadow: 0 0 20px rgba(0, 242, 254, 0.6); }
+  /* ===== SECTION DIVIDER ===== */
+  .divider {
+    border: none;
+    border-top: 1px solid rgba(0,255,255,0.12);
+    margin: 20px 0;
+  }
 
-    .secret-word-display {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: #fff;
-      background: rgba(255, 255, 255, 0.08);
-      padding: 10px 20px;
-      border-radius: 12px;
-      display: inline-block;
-      margin-top: 10px;
-    }
+  /* ===== ROLE CARD (Reveal Screen) ===== */
+  .role-card {
+    background: rgba(0,0,0,0.5);
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+    margin: 16px 0;
+    border: 2px solid transparent;
+  }
+  .role-card.crew { border-color: #00ffff; box-shadow: 0 0 30px rgba(0,255,255,0.3); }
+  .role-card.impostor { border-color: #ff0040; box-shadow: 0 0 30px rgba(255,0,64,0.4); }
+  .role-card.jester { border-color: #ffaa00; box-shadow: 0 0 30px rgba(255,170,0,0.4); }
 
-    /* Voting Grid */
-    .vote-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin: 18px 0;
-    }
+  .role-emoji { font-size: 3.5rem; margin-bottom: 10px; display: block; animation: float 3s ease-in-out infinite; }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
-    .vote-card {
-      background: var(--bg-card);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 16px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .vote-card:active {
-      border-color: var(--impostor-red);
-      transform: scale(0.96);
-    }
-    .vote-card .name {
-      font-weight: 700;
-      font-size: 1rem;
-      margin-bottom: 4px;
-    }
-    .vote-card .votes-count {
-      font-size: 0.78rem;
-      color: var(--impostor-red);
-      font-weight: 600;
-    }
+  .role-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+  .role-title.crew { color: #00ffff; }
+  .role-title.impostor { color: #ff0040; }
+  .role-title.jester { color: #ffaa00; }
 
-    /* Ejection Screen */
-    .eject-screen {
-      text-align: center;
-      padding: 60px 10px;
-    }
-    .eject-avatar {
-      font-size: 4rem;
-      animation: float-away 3s forwards ease-in-out;
-    }
-    @keyframes float-away {
-      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(-80px) rotate(360deg); opacity: 0; }
-    }
-  </style>
+  .word-display {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 12px 0;
+    padding: 12px 24px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.07);
+    display: inline-block;
+    letter-spacing: 2px;
+  }
+
+  /* ===== PLAYER TURN INDICATOR ===== */
+  .turn-indicator {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    color: #ffff00;
+    text-align: center;
+    margin-bottom: 16px;
+    text-shadow: 0 0 15px rgba(255,255,0,0.6);
+  }
+
+  /* ===== VOTING ===== */
+  .vote-btn {
+    width: 100%;
+    padding: 14px 16px;
+    margin: 6px 0;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .vote-btn:hover { background: rgba(255,0,64,0.2); border-color: #ff0040; }
+  .vote-btn.voted { background: rgba(255,0,64,0.3); border-color: #ff0040; pointer-events: none; }
+  .vote-count { margin-left: auto; font-size: 0.85rem; color: #ff6644; font-weight: 700; }
+
+  /* ===== SUS METER ===== */
+  .sus-bar-bg {
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    height: 20px;
+    margin: 8px 0 16px;
+    overflow: hidden;
+  }
+  .sus-bar-fill {
+    height: 100%;
+    border-radius: 20px;
+    background: linear-gradient(90deg, #00ff88, #ffff00, #ff0040);
+    width: 0%;
+    transition: width 2s ease;
+    box-shadow: 0 0 15px rgba(255,0,64,0.5);
+  }
+
+  /* ===== RESULT SCREEN ===== */
+  .result-emoji { font-size: 5rem; display: block; text-align: center; margin: 10px 0; animation: bounceIn 0.6s cubic-bezier(0.68,-0.55,0.265,1.55); }
+  @keyframes bounceIn {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: linear-gradient(135deg, rgba(0,15,30,0.98), rgba(0,30,60,0.98));
+    border: 1px solid rgba(0,255,255,0.35);
+    border-radius: 20px;
+    padding: 28px;
+    width: 100%;
+    max-width: 440px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 0 60px rgba(0,255,255,0.2);
+    animation: modalIn 0.3s ease;
+  }
+  @keyframes modalIn {
+    from { transform: scale(0.85) translateY(20px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+  }
+
+  .modal-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.3rem;
+    color: #00ffff;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .modal-rule {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: #ccc;
+  }
+  .rule-num {
+    color: #00ffff;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    min-width: 22px;
+  }
+
+  /* ===== EMERGENCY ===== */
+  .emergency-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 200;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: emergencyFlash 0.5s infinite;
+  }
+  .emergency-overlay.active { display: flex; }
+  @keyframes emergencyFlash {
+    0%,100% { background: rgba(255,0,0,0.15); }
+    50% { background: rgba(255,0,0,0.35); }
+  }
+  .emergency-text {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2rem, 8vw, 4rem);
+    font-weight: 900;
+    color: #ff0000;
+    text-shadow: 0 0 30px #ff0000, 0 0 60px #ff0000;
+    animation: emergencyText 0.5s infinite;
+    text-align: center;
+  }
+  @keyframes emergencyText {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  /* ===== AIRLOCK ===== */
+  .airlock-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 150;
+    display: none;
+  }
+  .airlock-canvas.active { display: block; }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,255,255,0.3); border-radius: 2px; }
+
+  /* ===== HEARTBEAT ===== */
+  #heartbeatSvg { width: 100%; height: 60px; }
+  .hb-line { stroke: #00ff88; stroke-width: 2; fill: none; animation: drawLine 1.5s ease-in-out infinite; }
+
+  /* ===== ADD SLOT BTN ===== */
+  .add-slot-btn {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: 1px dashed rgba(0,255,255,0.3);
+    border-radius: 10px;
+    color: rgba(0,255,255,0.6);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin: 4px 0 12px;
+    transition: all 0.3s;
+  }
+  .add-slot-btn:hover { border-color: #00ffff; color: #00ffff; background: rgba(0,255,255,0.05); }
+
+  /* ===== SMALL TEXT ===== */
+  .hint { font-size: 0.78rem; color: rgba(255,255,255,0.3); text-align: center; margin-top: 8px; }
+
+  /* ===== DISCUSSION TIMER ===== */
+  .timer-ring { display: flex; justify-content: center; margin: 12px 0; }
+  .timer-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    color: #ffff00;
+    text-shadow: 0 0 20px rgba(255,255,0,0.6);
+  }
+
+  /* Planet ring effect */
+  .planet-info {
+    background: rgba(255,170,0,0.08);
+    border: 1px solid rgba(255,170,0,0.25);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    color: rgba(255,200,100,0.8);
+    margin: 12px 0;
+    text-align: center;
+  }
+</style>
 </head>
 <body>
 
-  <div class="game-container">
-    
-    <!-- Title -->
-    <div class="title-banner">
-      <h1>IMPOSTOR</h1>
-      <p>Pass & Play • Space Deduction</p>
+<!-- ═══════════════════════════════════════════
+     BACKGROUND CANVAS (the epic space scene!)
+═══════════════════════════════════════════ -->
+<canvas id="bgCanvas"></canvas>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 1: LOBBY
+═══════════════════════════════════════════ -->
+<div id="lobbyScreen" class="screen active">
+  <div class="glass">
+    <div class="logo">☠ IMPOSTOR</div>
+    <div class="subtitle">⚡ Cyber Space Edition ⚡</div>
+
+    <button class="btn btn-ghost" onclick="openRulesModal()">📋 Mission Briefing (Read Rules)</button>
+
+    <hr class="divider">
+
+    <div style="font-size:0.8rem; color:#00ffff88; letter-spacing:2px; text-transform:uppercase; margin-bottom:12px;">
+      👥 Enter Player Names
     </div>
 
-    <!-- SCREEN 1: LOBBY SETUP -->
-    <div id="screenLobby">
-      <div class="card">
-        <h3>1. Crew Roster (<span id="playerCount">4</span> Players)</h3>
-        <div class="players-list" id="playersList"></div>
-        <div class="player-input-row">
-          <input type="text" id="newPlayerName" placeholder="Enter player name...">
-          <button class="btn btn-primary" id="addPlayerBtn" style="width: auto; padding: 10px 18px;">+ Add</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>2. Word Category</h3>
-        <select id="categorySelect">
-          <option value="gaming">🎮 Gaming & Esports</option>
-          <option value="college">🎓 College & Hostel Life</option>
-          <option value="food">🍕 Food & Midnight Snacks</option>
-          <option value="movies">🎬 Movies & Pop Culture</option>
-          <option value="tech">💻 Coding & Tech Giants</option>
-        </select>
-      </div>
-
-      <button class="btn btn-danger" id="startMissionBtn">
-        🚀 LAUNCH MISSION
-      </button>
+    <div id="playerSlots">
+      <!-- Slots are generated by JS -->
     </div>
 
-    <!-- SCREEN 2: PASS & REVEAL CARD -->
-    <div id="screenReveal" style="display: none;">
-      <div class="card" style="text-align: center;">
-        <span style="font-size: 2.5rem;">🤫</span>
-        <h2 id="passInstruction" style="font-family: var(--font-display); margin: 8px 0; font-size: 1.4rem;">Pass to Sayan</h2>
-        <p style="color: var(--text-dim); font-size: 0.85rem;">Make sure nobody else is looking at the screen!</p>
-      </div>
+    <button class="add-slot-btn" onclick="addPlayerSlot()">＋ Add Another Player</button>
 
-      <div class="reveal-card" id="revealCard">
-        <div id="revealPrompt">
-          <span style="font-size: 3rem;">👆</span>
-          <h3 style="margin-top: 10px; color: #fff;">TAP TO REVEAL ROLE</h3>
-          <p style="color: var(--text-dim); font-size: 0.8rem;">Tap to see your secret identity</p>
-        </div>
-        <div id="revealContent" style="display: none;">
-          <div class="role-badge" id="roleBadge">CREWMATE</div>
-          <p style="color: var(--text-dim); font-size: 0.85rem;" id="roleDescription">Your secret word is:</p>
-          <div class="secret-word-display" id="secretWord">PIZZA</div>
-        </div>
-      </div>
+    <div id="statusMsg" class="status-msg status-locked">🔒 Enter all player names to launch</div>
 
-      <button class="btn btn-primary" id="nextPlayerBtn" style="display: none;">
-        ✅ Hidden! Pass to Next
-      </button>
-    </div>
+    <hr class="divider">
 
-    <!-- SCREEN 3: DISCUSSION & EMERGENCY MEETING -->
-    <div id="screenDiscussion" style="display: none;">
-      <div class="card" style="text-align: center;">
-        <h2 style="font-family: var(--font-display); color: var(--gold);">MISSION IN PROGRESS</h2>
-        <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 6px;">
-          Take turns saying <strong>ONE WORD</strong> that relates to your secret word without giving it away!
-        </p>
-      </div>
+    <div class="select-label">🎯 Mission Category</div>
+    <select id="categorySelect">
+      <option value="random">🎲 Random Mix</option>
+      <option value="food">🍕 Food & Drinks</option>
+      <option value="animals">🦁 Animals</option>
+      <option value="tech">💻 Technology</option>
+      <option value="movies">🎬 Movies & Shows</option>
+      <option value="sports">⚽ Sports</option>
+      <option value="places">🌍 World Places</option>
+    </select>
 
-      <div class="card">
-        <h3>Turn Order</h3>
-        <ol id="turnOrderList" style="padding-left: 20px; font-size: 0.95rem; line-height: 1.8;"></ol>
-      </div>
+    <button class="btn btn-primary" id="launchBtn" onclick="startGame()" disabled>
+      🚀 LAUNCH MISSION
+    </button>
 
-      <button class="btn btn-danger" id="emergencyMeetingBtn" style="padding: 20px; font-size: 1.1rem;">
-        🚨 EMERGENCY MEETING
-      </button>
-    </div>
-
-    <!-- SCREEN 4: VOTING -->
-    <div id="screenVoting" style="display: none;">
-      <div class="card" style="text-align: center;">
-        <h2 style="font-family: var(--font-display); color: var(--impostor-red);">VOTE TO EJECT</h2>
-        <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 6px;">Who is the Impostor? Tap a player to cast your vote.</p>
-      </div>
-
-      <div class="vote-grid" id="voteGrid"></div>
-      <button class="btn btn-danger" id="confirmVoteBtn">CONFIRM EJECTION</button>
-    </div>
-
-    <!-- SCREEN 5: EJECTION RESULT -->
-    <div id="screenResult" style="display: none;">
-      <div class="eject-screen">
-        <div class="eject-avatar">🧑‍🚀</div>
-        <h2 id="ejectMessage" style="font-family: var(--font-display); font-size: 1.4rem; margin: 16px 0 8px;">Player was ejected.</h2>
-        <p id="ejectVerdict" style="font-size: 1.1rem; font-weight: 700; color: var(--crew-cyan);">They were NOT the Impostor.</p>
-      </div>
-
-      <button class="btn btn-primary" id="playAgainBtn">🔄 PLAY AGAIN</button>
-    </div>
-
+    <p class="hint">Pass the phone between players during reveals</p>
   </div>
+</div>
 
-  <!-- JAVASCRIPT LOGIC -->
-  <script>
-    // Audio Synthesizer (Zero-file sound effects)
-    const AudioEngine = {
-      ctx: null,
-      init() {
-        if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-      },
-      playAlarm() {
-        this.init();
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(440, this.ctx.currentTime);
-        osc.frequency.linearRampToValueAtTime(880, this.ctx.currentTime + 0.3);
-        gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.5);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start();
-        osc.stop(this.ctx.currentTime + 0.5);
-      },
-      playBeep() {
-        this.init();
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.frequency.setValueAtTime(600, this.ctx.currentTime);
-        gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.15);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start();
-        osc.stop(this.ctx.currentTime + 0.15);
+<!-- ═══════════════════════════════════════════
+     SCREEN 2: ROLE REVEAL
+═══════════════════════════════════════════ -->
+<div id="revealScreen" class="screen">
+  <div class="glass">
+    <div class="turn-indicator" id="turnIndicator">PLAYER'S TURN</div>
+
+    <div id="tapToReveal" style="text-align:center; cursor:pointer;" onclick="flipCard()">
+      <div style="font-size:3rem; margin:20px 0; animation: float 2s ease-in-out infinite;">👁️</div>
+      <div style="font-family:'Orbitron',sans-serif; font-size:1rem; color:#00ffff;">TAP TO SEE YOUR ROLE</div>
+      <div style="font-size:0.78rem; color:#ffffff44; margin-top:8px;">(Hide screen from others)</div>
+    </div>
+
+    <div id="roleContent" style="display:none;">
+      <div class="role-card" id="roleCard">
+        <span class="role-emoji" id="roleEmoji">🚀</span>
+        <div class="role-title" id="roleTitle">CREW</div>
+        <div style="font-size:0.85rem; color:#aaa; margin:8px 0;">YOUR WORD:</div>
+        <div class="word-display" id="wordDisplay">???</div>
+        <div style="font-size:0.82rem; color:#aaa; margin-top:12px; line-height:1.5;" id="roleDesc"></div>
+      </div>
+      <button class="btn btn-secondary" onclick="nextPlayer()">✅ Done — Pass Phone</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 3: DISCUSSION
+═══════════════════════════════════════════ -->
+<div id="discussionScreen" class="screen">
+  <div class="glass">
+    <div class="logo" style="font-size:1.6rem; margin-bottom:8px;">💬 DISCUSSION</div>
+    <div class="timer-ring"><span class="timer-num" id="discTimer">60</span></div>
+
+    <div class="planet-info">
+      🗣 Each player gives ONE clue about their word.<br>
+      Impostors — don't get caught!
+    </div>
+
+    <div style="margin:12px 0;">
+      <div style="font-size:0.8rem; color:#00ffff88; letter-spacing:2px; margin-bottom:8px;">PLAYER ORDER:</div>
+      <div id="playerOrderList"></div>
+    </div>
+
+    <hr class="divider">
+
+    <button class="btn btn-danger" onclick="triggerEmergency()">🚨 EMERGENCY MEETING</button>
+    <button class="btn btn-primary" onclick="goToVoting()">⚖️ PROCEED TO VOTE</button>
+    <button class="btn btn-ghost" onclick="openSusMeter()">💓 Sus-O-Meter Scan</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 4: VOTING
+═══════════════════════════════════════════ -->
+<div id="votingScreen" class="screen">
+  <div class="glass">
+    <div class="logo" style="font-size:1.5rem; margin-bottom:8px;">⚖️ VOTE THE IMPOSTOR</div>
+    <div style="text-align:center; font-size:0.85rem; color:#aaa; margin-bottom:20px;">
+      Who do you think is lying?
+    </div>
+    <div id="voteButtons"></div>
+    <button class="btn btn-ghost" style="margin-top:12px;" onclick="skipVote()">🤐 Skip Vote</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 5: RESULT
+═══════════════════════════════════════════ -->
+<div id="resultScreen" class="screen">
+  <div class="glass" style="text-align:center;">
+    <span class="result-emoji" id="resultEmoji">🏆</span>
+    <div class="logo" style="font-size:1.6rem;" id="resultTitle">CREW WINS!</div>
+    <div style="color:#aaa; font-size:0.95rem; margin:16px 0; line-height:1.6;" id="resultDesc"></div>
+
+    <div style="background:rgba(255,255,255,0.05); border-radius:12px; padding:14px; margin:14px 0; font-size:0.88rem; line-height:2;" id="roleRevealBox"></div>
+
+    <button class="btn btn-primary" onclick="playAgain()">🔄 Play Again</button>
+    <button class="btn btn-secondary" onclick="backToLobby()">🏠 Back to Lobby</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     MODAL: RULES
+═══════════════════════════════════════════ -->
+<div class="modal-overlay" id="rulesModal">
+  <div class="modal-box">
+    <div class="modal-title">📋 MISSION BRIEFING</div>
+    <div class="modal-rule"><span class="rule-num">01</span><span>All players sit together. One person holds the phone as "Game Master" to start the game.</span></div>
+    <div class="modal-rule"><span class="rule-num">02</span><span>Each player gets a secret role: <b style="color:#00ffff">Crew</b>, <b style="color:#ff0040">Impostor</b>, or <b style="color:#ffaa00">Jester</b>.</span></div>
+    <div class="modal-rule"><span class="rule-num">03</span><span>Crew get the <b>real word</b> (e.g., "Pizza"). Impostors get a <b>similar fake word</b> (e.g., "Burger").</span></div>
+    <div class="modal-rule"><span class="rule-num">04</span><span>During discussion, each player gives ONE clue about their word without saying it directly.</span></div>
+    <div class="modal-rule"><span class="rule-num">05</span><span>Vote to eject the most suspicious player. Most votes = ejected into space! 🚀</span></div>
+    <div class="modal-rule"><span class="rule-num">06</span><span><b style="color:#00ffff">Crew wins</b> by ejecting the Impostor. <b style="color:#ff0040">Impostor wins</b> if not caught. <b style="color:#ffaa00">Jester wins</b> by getting voted out!</span></div>
+    <div class="modal-rule"><span class="rule-num">07</span><span>Use the Sus-O-Meter 💓 to add dramatic tension during accusation!</span></div>
+    <button class="btn btn-primary" style="margin-top:20px;" onclick="closeRulesModal()">🚀 Got It — Let's Play!</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     MODAL: SUS-O-METER
+═══════════════════════════════════════════ -->
+<div class="modal-overlay" id="susMeterModal">
+  <div class="modal-box">
+    <div class="modal-title">💓 BIOMETRIC SUS-O-METER</div>
+    <div style="text-align:center; font-size:0.85rem; color:#aaa; margin-bottom:16px;">
+      Select a player for suspicion scan...
+    </div>
+    <select id="susPlayerSelect" style="margin-bottom:16px;"></select>
+    <button class="btn btn-danger" onclick="runSusScan()">🔍 RUN SCAN</button>
+    <div id="susResult" style="display:none; margin-top:16px;">
+      <div style="font-size:0.88rem; color:#aaa; margin-bottom:6px;">SUSPICION LEVEL:</div>
+      <div class="sus-bar-bg"><div class="sus-bar-fill" id="susBarFill"></div></div>
+      <div id="susVerdict" style="text-align:center; font-family:'Orbitron',sans-serif; font-size:1rem; margin-top:8px;"></div>
+      <svg id="heartbeatSvg" viewBox="0 0 300 60">
+        <polyline id="hbLine" class="hb-line" points="0,30 40,30 55,5 70,55 85,30 120,30 135,15 150,45 165,30 200,30 215,10 230,50 245,30 300,30"/>
+      </svg>
+    </div>
+    <button class="btn btn-ghost" style="margin-top:12px;" onclick="closeSusMeter()">✖ Close</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     EMERGENCY OVERLAY
+═══════════════════════════════════════════ -->
+<div class="emergency-overlay" id="emergencyOverlay">
+  <div class="emergency-text">⚠ EMERGENCY<br>MEETING ⚠</div>
+  <div style="font-size:1.2rem; color:#ff6644; margin-top:20px; font-family:'Orbitron',sans-serif;">REPORT CALLED</div>
+  <button class="btn btn-danger" style="max-width:260px; margin-top:30px;" onclick="closeEmergency()">
+    ENTER MEETING ROOM
+  </button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     AIRLOCK EJECTION CANVAS
+═══════════════════════════════════════════ -->
+<canvas id="airlockCanvas" class="airlock-canvas"></canvas>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+//  PART 1: EPIC BACKGROUND ENGINE
+// ═══════════════════════════════════════════════════════════
+
+const bgCanvas = document.getElementById('bgCanvas');
+const bgCtx = bgCanvas.getContext('2d');
+
+let bgW, bgH, stars = [], meteors = [], nebulaClouds = [], supernovas = [];
+let bgTime = 0;
+let isEmergencyMode = false;
+
+function resizeBg() {
+  bgW = bgCanvas.width = window.innerWidth;
+  bgH = bgCanvas.height = window.innerHeight;
+}
+
+// ── Stars (with twinkle)
+function initStars() {
+  stars = [];
+  for (let i = 0; i < 200; i++) {
+    stars.push({
+      x: Math.random() * bgW,
+      y: Math.random() * bgH,
+      r: Math.random() * 1.8 + 0.2,
+      opacity: Math.random(),
+      twinkleSpeed: Math.random() * 0.03 + 0.005,
+      twinkleDir: Math.random() > 0.5 ? 1 : -1,
+      hue: Math.random() > 0.8 ? (Math.random() > 0.5 ? 180 : 300) : 0 // cyan/purple tinted
+    });
+  }
+}
+
+// ── Meteor class
+class Meteor {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * bgW * 1.5;
+    this.y = -50;
+    this.len = Math.random() * 120 + 60;
+    this.speed = Math.random() * 6 + 4;
+    this.angle = Math.PI / 4 + (Math.random() - 0.5) * 0.3;
+    this.opacity = Math.random() * 0.7 + 0.3;
+    this.width = Math.random() * 2 + 0.5;
+    this.color = Math.random() > 0.5 ? '#00ffff' : '#ff88ff';
+  }
+  update() {
+    this.x += Math.cos(this.angle) * this.speed;
+    this.y += Math.sin(this.angle) * this.speed;
+    if (this.y > bgH + 100 || this.x > bgW + 100) this.reset();
+  }
+  draw(ctx) {
+    const grd = ctx.createLinearGradient(
+      this.x, this.y,
+      this.x - Math.cos(this.angle) * this.len,
+      this.y - Math.sin(this.angle) * this.len
+    );
+    grd.addColorStop(0, this.color.replace(')', `,${this.opacity})`).replace('rgb', 'rgba'));
+    grd.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.beginPath();
+    ctx.strokeStyle = grd;
+    ctx.lineWidth = this.width;
+    ctx.moveTo(this.x, this.y);
+    ctx.lineTo(
+      this.x - Math.cos(this.angle) * this.len,
+      this.y - Math.sin(this.angle) * this.len
+    );
+    ctx.stroke();
+
+    // Glowing head
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.width + 1, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.shadowColor = this.color;
+    ctx.shadowBlur = 12;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+}
+
+// ── Nebula cloud blob
+class NebulaCloud {
+  constructor() {
+    this.x = Math.random() * bgW;
+    this.y = Math.random() * bgH;
+    this.r = Math.random() * 200 + 100;
+    this.hue = [180, 270, 320, 30][Math.floor(Math.random() * 4)];
+    this.opacity = Math.random() * 0.06 + 0.02;
+    this.pulseSpeed = Math.random() * 0.008 + 0.003;
+    this.pulseAmt = Math.random() * 0.02 + 0.01;
+    this.phase = Math.random() * Math.PI * 2;
+    this.driftX = (Math.random() - 0.5) * 0.12;
+    this.driftY = (Math.random() - 0.5) * 0.08;
+  }
+  draw(ctx, t) {
+    this.x += this.driftX;
+    this.y += this.driftY;
+    if (this.x > bgW + this.r) this.x = -this.r;
+    if (this.x < -this.r) this.x = bgW + this.r;
+    if (this.y > bgH + this.r) this.y = -this.r;
+    if (this.y < -this.r) this.y = bgH + this.r;
+
+    const pulse = Math.sin(t * this.pulseSpeed + this.phase) * this.pulseAmt;
+    const currentOpacity = this.opacity + pulse;
+    const grd = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r);
+    grd.addColorStop(0, `hsla(${this.hue},100%,70%,${currentOpacity * 2})`);
+    grd.addColorStop(0.5, `hsla(${this.hue},80%,50%,${currentOpacity})`);
+    grd.addColorStop(1, `hsla(${this.hue},60%,30%,0)`);
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = grd;
+    ctx.fill();
+  }
+}
+
+// ── Supernova burst
+class Supernova {
+  constructor() {
+    this.x = Math.random() * bgW;
+    this.y = Math.random() * bgH;
+    this.r = 0;
+    this.maxR = Math.random() * 80 + 40;
+    this.opacity = 1;
+    this.hue = [180, 60, 300, 30][Math.floor(Math.random() * 4)];
+    this.done = false;
+  }
+  draw(ctx) {
+    this.r += 2;
+    this.opacity -= 0.015;
+    if (this.opacity <= 0) { this.done = true; return; }
+
+    const grd = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r);
+    grd.addColorStop(0, `hsla(${this.hue},100%,90%,${this.opacity * 0.8})`);
+    grd.addColorStop(0.4, `hsla(${this.hue},80%,60%,${this.opacity * 0.4})`);
+    grd.addColorStop(1, `hsla(${this.hue},60%,40%,0)`);
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = grd;
+    ctx.fill();
+  }
+}
+
+function initBg() {
+  resizeBg();
+  initStars();
+  for (let i = 0; i < 5; i++) meteors.push(new Meteor());
+  for (let i = 0; i < 8; i++) nebulaClouds.push(new NebulaCloud());
+  window.addEventListener('resize', () => { resizeBg(); initStars(); });
+}
+
+function drawBackground() {
+  bgCtx.clearRect(0, 0, bgW, bgH);
+
+  // ── Deep space gradient base
+  if (isEmergencyMode) {
+    const base = bgCtx.createRadialGradient(bgW/2, bgH/2, 0, bgW/2, bgH/2, bgH);
+    base.addColorStop(0, '#1a0008');
+    base.addColorStop(0.5, '#0d0004');
+    base.addColorStop(1, '#000000');
+    bgCtx.fillStyle = base;
+    bgCtx.fillRect(0, 0, bgW, bgH);
+  } else {
+    const base = bgCtx.createRadialGradient(bgW/2, bgH*0.3, 0, bgW/2, bgH*0.5, bgH);
+    base.addColorStop(0, '#000d1a');
+    base.addColorStop(0.4, '#000815');
+    base.addColorStop(0.8, '#03001a');
+    base.addColorStop(1, '#000000');
+    bgCtx.fillStyle = base;
+    bgCtx.fillRect(0, 0, bgW, bgH);
+  }
+
+  // ── Nebula clouds
+  nebulaClouds.forEach(n => n.draw(bgCtx, bgTime));
+
+  // ── Planet silhouette (bottom right)
+  const pX = bgW * 0.88, pY = bgH * 0.85, pR = Math.min(bgW, bgH) * 0.22;
+  bgCtx.beginPath();
+  bgCtx.arc(pX, pY, pR, 0, Math.PI * 2);
+  bgCtx.fillStyle = '#000611';
+  bgCtx.fill();
+  // Planet ring glow
+  const pgrd = bgCtx.createRadialGradient(pX, pY, pR * 0.85, pX, pY, pR * 1.15);
+  pgrd.addColorStop(0, 'rgba(0,180,255,0.0)');
+  pgrd.addColorStop(0.5, 'rgba(0,180,255,0.12)');
+  pgrd.addColorStop(1, 'rgba(0,180,255,0.0)');
+  bgCtx.beginPath();
+  bgCtx.arc(pX, pY, pR * 1.12, 0, Math.PI * 2);
+  bgCtx.fillStyle = pgrd;
+  bgCtx.fill();
+  // Ring line
+  bgCtx.save();
+  bgCtx.translate(pX, pY);
+  bgCtx.scale(1, 0.25);
+  bgCtx.beginPath();
+  bgCtx.arc(0, 0, pR * 1.4, 0, Math.PI * 2);
+  bgCtx.strokeStyle = 'rgba(0,200,255,0.15)';
+  bgCtx.lineWidth = 6;
+  bgCtx.stroke();
+  bgCtx.restore();
+
+  // ── Twinkling stars
+  stars.forEach(s => {
+    s.opacity += s.twinkleSpeed * s.twinkleDir;
+    if (s.opacity >= 1) s.twinkleDir = -1;
+    if (s.opacity <= 0.05) s.twinkleDir = 1;
+
+    bgCtx.beginPath();
+    bgCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    if (s.hue === 180) {
+      bgCtx.fillStyle = `rgba(0,255,255,${s.opacity * 0.8})`;
+    } else if (s.hue === 300) {
+      bgCtx.fillStyle = `rgba(200,100,255,${s.opacity * 0.8})`;
+    } else {
+      bgCtx.fillStyle = `rgba(255,255,255,${s.opacity})`;
+    }
+    bgCtx.fill();
+
+    // Occasional cross-flare on bright stars
+    if (s.r > 1.4 && s.opacity > 0.7) {
+      bgCtx.strokeStyle = `rgba(255,255,255,${s.opacity * 0.3})`;
+      bgCtx.lineWidth = 0.5;
+      bgCtx.beginPath();
+      bgCtx.moveTo(s.x - s.r * 3, s.y);
+      bgCtx.lineTo(s.x + s.r * 3, s.y);
+      bgCtx.moveTo(s.x, s.y - s.r * 3);
+      bgCtx.lineTo(s.x, s.y + s.r * 3);
+      bgCtx.stroke();
+    }
+  });
+
+  // ── Meteors
+  meteors.forEach(m => { m.update(); m.draw(bgCtx); });
+
+  // ── Supernovas
+  supernovas = supernovas.filter(s => !s.done);
+  supernovas.forEach(s => s.draw(bgCtx));
+
+  // ── Emergency red pulse overlay
+  if (isEmergencyMode) {
+    const pulse = (Math.sin(bgTime * 0.1) + 1) / 2;
+    bgCtx.fillStyle = `rgba(255,0,0,${pulse * 0.12})`;
+    bgCtx.fillRect(0, 0, bgW, bgH);
+  }
+
+  bgTime++;
+
+  // Randomly spawn supernova
+  if (Math.random() < 0.002 && supernovas.length < 4) {
+    supernovas.push(new Supernova());
+  }
+
+  requestAnimationFrame(drawBackground);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PART 2: GAME DATA
+// ═══════════════════════════════════════════════════════════
+
+const WORD_BANKS = {
+  food: [
+    ['Pizza','Burger'],['Sushi','Sashimi'],['Pasta','Noodles'],['Cake','Pie'],
+    ['Coffee','Tea'],['Chocolate','Caramel'],['Apple','Pear'],['Taco','Burrito']
+  ],
+  animals: [
+    ['Lion','Tiger'],['Dolphin','Shark'],['Eagle','Hawk'],['Elephant','Rhino'],
+    ['Penguin','Puffin'],['Wolf','Fox'],['Giraffe','Zebra'],['Crocodile','Alligator']
+  ],
+  tech: [
+    ['Laptop','Tablet'],['Google','Bing'],['Robot','Drone'],['Keyboard','Mouse'],
+    ['Internet','WiFi'],['Python','Java'],['iPhone','Android'],['Twitter','Instagram']
+  ],
+  movies: [
+    ['Avengers','Justice League'],['Batman','Superman'],['Titanic','Poseidon'],
+    ['Matrix','Inception'],['Frozen','Moana'],['Joker','Venom'],['Dune','Star Wars']
+  ],
+  sports: [
+    ['Football','Rugby'],['Cricket','Baseball'],['Tennis','Badminton'],['Swimming','Diving'],
+    ['Basketball','Volleyball'],['Boxing','MMA'],['Golf','Polo'],['Cycling','Running']
+  ],
+  places: [
+    ['Paris','Rome'],['Tokyo','Seoul'],['Amazon','Congo'],['Everest','K2'],
+    ['Dubai','Abu Dhabi'],['New York','Chicago'],['Australia','New Zealand']
+  ]
+};
+
+// ═══════════════════════════════════════════════════════════
+//  PART 3: PLAYER SLOT MANAGEMENT
+// ═══════════════════════════════════════════════════════════
+
+let slotCount = 0;
+const MIN_PLAYERS = 3;
+const ICONS = ['🧑‍🚀','👩‍🚀','🧑‍💻','👨‍🔬','👩‍🔬','🕵️','🤖','👾'];
+
+function addPlayerSlot() {
+  slotCount++;
+  const container = document.getElementById('playerSlots');
+  const slot = document.createElement('div');
+  slot.className = 'player-slot';
+  slot.id = `slot-${slotCount}`;
+  slot.innerHTML = `
+    <span class="slot-icon">${ICONS[(slotCount-1) % ICONS.length]}</span>
+    <input
+      class="player-input"
+      id="player-${slotCount}"
+      type="text"
+      placeholder="Player ${slotCount} name..."
+      maxlength="14"
+      oninput="validatePlayers()"
+      autocomplete="off"
+    />
+  `;
+  container.appendChild(slot);
+  document.getElementById(`player-${slotCount}`).focus();
+  validatePlayers();
+}
+
+function validatePlayers() {
+  const inputs = document.querySelectorAll('.player-input');
+  let filledCount = 0;
+  inputs.forEach(inp => {
+    const filled = inp.value.trim().length > 0;
+    inp.classList.toggle('filled', filled);
+    if (filled) filledCount++;
+  });
+
+  const totalSlots = inputs.length;
+  const launchBtn = document.getElementById('launchBtn');
+  const statusMsg = document.getElementById('statusMsg');
+
+  if (totalSlots < MIN_PLAYERS) {
+    statusMsg.className = 'status-msg status-locked';
+    statusMsg.textContent = `🔒 Need at least ${MIN_PLAYERS} players (add ${MIN_PLAYERS - totalSlots} more)`;
+    launchBtn.disabled = true;
+  } else if (filledCount < totalSlots) {
+    statusMsg.className = 'status-msg status-locked';
+    statusMsg.textContent = `🔒 ${totalSlots - filledCount} empty slot${totalSlots - filledCount > 1 ? 's' : ''} — fill all names`;
+    launchBtn.disabled = true;
+  } else {
+    statusMsg.className = 'status-msg status-ready';
+    statusMsg.textContent = `✅ ${filledCount} crew members ready — LAUNCH!`;
+    launchBtn.disabled = false;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PART 4: GAME STATE
+// ═══════════════════════════════════════════════════════════
+
+let players = [];
+let roles = {}; // { playerName: 'crew'|'impostor'|'jester' }
+let words = {}; // { playerName: word }
+let currentRevealIndex = 0;
+let votes = {};
+let discussionTimer;
+let gameCategory = 'random';
+
+function getPlayers() {
+  return Array.from(document.querySelectorAll('.player-input'))
+    .map(i => i.value.trim())
+    .filter(n => n.length > 0);
+}
+
+function getWordPair(category) {
+  let bank;
+  if (category === 'random') {
+    const cats = Object.keys(WORD_BANKS);
+    bank = WORD_BANKS[cats[Math.floor(Math.random() * cats.length)]];
+  } else {
+    bank = WORD_BANKS[category] || WORD_BANKS.food;
+  }
+  return bank[Math.floor(Math.random() * bank.length)];
+}
+
+function assignRoles() {
+  players = getPlayers();
+  gameCategory = document.getElementById('categorySelect').value;
+
+  const shuffled = [...players].sort(() => Math.random() - 0.5);
+
+  // Assign: 1 Impostor, 1 Jester if 4+ players, rest Crew
+  let impostorIdx = Math.floor(Math.random() * shuffled.length);
+  let jesterIdx = -1;
+  if (shuffled.length >= 4) {
+    do { jesterIdx = Math.floor(Math.random() * shuffled.length); }
+    while (jesterIdx === impostorIdx);
+  }
+
+  const [crewWord, impostorWord] = getWordPair(gameCategory);
+
+  roles = {};
+  words = {};
+
+  shuffled.forEach((p, i) => {
+    if (i === impostorIdx) {
+      roles[p] = 'impostor';
+      words[p] = impostorWord;
+    } else if (i === jesterIdx) {
+      roles[p] = 'jester';
+      words[p] = '???'; // Jester doesn't know the word
+    } else {
+      roles[p] = 'crew';
+      words[p] = crewWord;
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PART 5: SCREEN NAVIGATION
+// ═══════════════════════════════════════════════════════════
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startGame() {
+  assignRoles();
+  currentRevealIndex = 0;
+  showRevealFor(0);
+  showScreen('revealScreen');
+  playBeep(440, 0.1, 'sine');
+}
+
+function showRevealFor(index) {
+  const player = players[index];
+  document.getElementById('turnIndicator').textContent = `👤 ${player.toUpperCase()}'S TURN`;
+  document.getElementById('tapToReveal').style.display = 'block';
+  document.getElementById('roleContent').style.display = 'none';
+}
+
+function flipCard() {
+  const player = players[currentRevealIndex];
+  const role = roles[player];
+  const word = words[player];
+
+  document.getElementById('tapToReveal').style.display = 'none';
+  document.getElementById('roleContent').style.display = 'block';
+
+  const card = document.getElementById('roleCard');
+  card.className = `role-card ${role}`;
+
+  const configs = {
+    crew: {
+      emoji: '🚀',
+      title: 'CREW MEMBER',
+      desc: 'You know the real word. Give a clue during discussion — but be subtle so the Impostor can\'t figure it out!',
+    },
+    impostor: {
+      emoji: '🔪',
+      title: 'IMPOSTOR',
+      desc: `Danger! Your word is DIFFERENT from the crew's. Blend in! Sound confident. If voted out — you LOSE.`,
+    },
+    jester: {
+      emoji: '🤡',
+      title: 'JESTER',
+      desc: `You have NO word. Act suspicious! If the crew votes YOU out — YOU WIN! Try to get ejected.`,
+    }
+  };
+
+  const cfg = configs[role];
+  document.getElementById('roleEmoji').textContent = cfg.emoji;
+  document.getElementById('roleTitle').textContent = cfg.title;
+  document.getElementById('roleTitle').className = `role-title ${role}`;
+  document.getElementById('wordDisplay').textContent = word;
+  document.getElementById('roleDesc').textContent = cfg.desc;
+
+  if (role === 'impostor') {
+    playBeep(200, 0.15, 'sawtooth');
+    navigator.vibrate && navigator.vibrate([200,100,200,100,400]);
+  } else if (role === 'jester') {
+    playBeep(330, 0.1, 'triangle');
+  } else {
+    playBeep(550, 0.08, 'sine');
+  }
+}
+
+function nextPlayer() {
+  currentRevealIndex++;
+  if (currentRevealIndex < players.length) {
+    showRevealFor(currentRevealIndex);
+  } else {
+    startDiscussion();
+  }
+}
+
+function startDiscussion() {
+  showScreen('discussionScreen');
+
+  // Show shuffled player order
+  const shuffledPlayers = [...players].sort(() => Math.random() - 0.5);
+  const list = document.getElementById('playerOrderList');
+  list.innerHTML = shuffledPlayers.map((p, i) =>
+    `<div style="padding:8px 12px; margin:4px 0; background:rgba(255,255,255,0.04); border-radius:8px; font-size:0.9rem;">
+       <span style="color:#00ffff88; font-family:'Orbitron',sans-serif; font-size:0.75rem;">${i+1}.</span>
+       ${ICONS[players.indexOf(p) % ICONS.length]} ${p}
+     </div>`
+  ).join('');
+
+  // Countdown timer
+  let time = 60;
+  document.getElementById('discTimer').textContent = time;
+  clearInterval(discussionTimer);
+  discussionTimer = setInterval(() => {
+    time--;
+    document.getElementById('discTimer').textContent = time;
+    document.getElementById('discTimer').style.color = time <= 10 ? '#ff4444' : '#ffff00';
+    if (time <= 0) {
+      clearInterval(discussionTimer);
+      goToVoting();
+    }
+  }, 1000);
+}
+
+function goToVoting() {
+  clearInterval(discussionTimer);
+  votes = {};
+  const container = document.getElementById('voteButtons');
+  container.innerHTML = players.map(p =>
+    `<button class="vote-btn" id="vote-${p}" onclick="castVote('${p}')">
+       ${ICONS[players.indexOf(p) % ICONS.length]} ${p}
+       <span class="vote-count" id="vc-${p}"></span>
+     </button>`
+  ).join('');
+  showScreen('votingScreen');
+  playBeep(300, 0.1, 'triangle');
+}
+
+function castVote(playerName) {
+  // Simple: first vote determines ejected player
+  votes[playerName] = (votes[playerName] || 0) + 1;
+  const btn = document.getElementById(`vote-${playerName}`);
+  btn.classList.add('voted');
+  document.getElementById(`vc-${playerName}`).textContent = `● VOTED`;
+
+  // Auto proceed after 1.5s
+  setTimeout(() => ejectPlayer(playerName), 1500);
+}
+
+function skipVote() {
+  showResult('skip', null);
+}
+
+function ejectPlayer(ejected) {
+  clearInterval(discussionTimer);
+  triggerAirlock(ejected, () => {
+    showResult('ejected', ejected);
+  });
+}
+
+function showResult(type, ejected) {
+  let emoji, title, desc, roleReveal = '';
+  const impostor = players.find(p => roles[p] === 'impostor');
+  const jester = players.find(p => roles[p] === 'jester');
+  const ejectedRole = ejected ? roles[ejected] : null;
+
+  if (type === 'skip') {
+    emoji = '😅'; title = 'VOTE SKIPPED';
+    desc = `No one was ejected. The Impostor roams free...`;
+  } else if (ejectedRole === 'impostor') {
+    emoji = '🎉'; title = 'CREW WINS!';
+    desc = `${ejected} was the Impostor! The station is safe. 🚀`;
+  } else if (ejectedRole === 'jester') {
+    emoji = '🤡'; title = 'JESTER WINS!';
+    desc = `${ejected} was the Jester and wanted to be ejected! 🎭 Everyone else loses!`;
+  } else {
+    emoji = '😈'; title = 'IMPOSTOR WINS!';
+    desc = `${ejected} was innocent! The Impostor ${impostor} survives and wins! 🔪`;
+  }
+
+  // Role reveal for all players
+  roleReveal = players.map(p => {
+    const r = roles[p];
+    const icon = r === 'impostor' ? '🔪' : r === 'jester' ? '🤡' : '🚀';
+    const w = words[p];
+    return `${icon} <b>${p}</b>: ${r.toUpperCase()} ${r !== 'jester' ? `— "${w}"` : ''}`;
+  }).join('<br>');
+
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultDesc').textContent = desc;
+  document.getElementById('roleRevealBox').innerHTML = roleReveal;
+
+  showScreen('resultScreen');
+  playBeep(ejectedRole === 'impostor' ? 880 : 220, 0.2, 'sine');
+}
+
+function playAgain() {
+  assignRoles();
+  currentRevealIndex = 0;
+  showRevealFor(0);
+  showScreen('revealScreen');
+}
+
+function backToLobby() {
+  clearInterval(discussionTimer);
+  showScreen('lobbyScreen');
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PART 6: MODALS
+// ═══════════════════════════════════════════════════════════
+
+function openRulesModal() {
+  document.getElementById('rulesModal').classList.add('open');
+}
+function closeRulesModal() {
+  document.getElementById('rulesModal').classList.remove('open');
+}
+
+function openSusMeter() {
+  const select = document.getElementById('susPlayerSelect');
+  select.innerHTML = players.map(p =>
+    `<option value="${p}">${ICONS[players.indexOf(p) % ICONS.length]} ${p}</option>`
+  ).join('');
+  document.getElementById('susResult').style.display = 'none';
+  document.getElementById('susMeterModal').classList.add('open');
+}
+function closeSusMeter() {
+  document.getElementById('susMeterModal').classList.remove('open');
+}
+
+function runSusScan() {
+  const player = document.getElementById('susPlayerSelect').value;
+  const pct = Math.floor(Math.random() * 100);
+  const verdicts = [
+    [0,  30,  '💚 CLEAN — Probably innocent'],
+    [30, 60,  '💛 SKETCHY — Seems nervous...'],
+    [60, 80,  '🟠 VERY SUS — Acting weird!'],
+    [80, 101, '🔴 IMPOSTOR DETECTED — 100% sus!']
+  ];
+  const [,, text] = verdicts.find(([lo, hi]) => pct >= lo && pct < hi);
+
+  document.getElementById('susResult').style.display = 'block';
+  document.getElementById('susVerdict').textContent = `${player}: ${pct}% — ${text}`;
+
+  // Animate bar after render
+  setTimeout(() => {
+    document.getElementById('susBarFill').style.width = pct + '%';
+  }, 100);
+
+  playBeep(300 + pct * 3, 0.1, 'sawtooth');
+  navigator.vibrate && navigator.vibrate(pct > 80 ? [300,100,300] : [100]);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PART 7: EMERGENCY MEETING
+// ═══════════════════════════════════════════════════════════
+
+function triggerEmergency() {
+  clearInterval(discussionTimer);
+  isEmergencyMode = true;
+  document.getElementById('emergencyOverlay').classList.add('active');
+  playEmergencySiren();
+  navigator.vibrate && navigator.vibrate([500,200,500,200,500]);
+}
+
+function closeEmergency() {
+  isEmergencyMode = false;
+  document.getElementById('emergencyOverlay').classList.remove('active');
+  goToVoting();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PART 8: AIRLOCK EJECTION
+// ═══════════════════════════════════════════════════════════
+
+function triggerAirlock(playerName, callback) {
+  const canvas = document.getElementById('airlockCanvas');
+  canvas.classList.add('active');
+  const ctx = canvas.getContext('2d');
+  canvas.width = bgW;
+  canvas.height = bgH;
+
+  let frame = 0;
+  let warpStars = Array.from({length: 80}, () => ({
+    x: bgW/2 + (Math.random()-0.5)*200,
+    y: bgH/2 + (Math.random()-0.5)*200,
+    angle: Math.random() * Math.PI * 2,
+    speed: 1
+  }));
+  let textOpacity = 1;
+  let ejecting = false;
+  let ejectY = bgH / 2;
+  let ejectOpacity = 1;
+
+  function animate() {
+    ctx.clearRect(0, 0, bgW, bgH);
+    ctx.fillStyle = 'rgba(0,0,0,0.85)';
+    ctx.fillRect(0, 0, bgW, bgH);
+
+    // Warp-speed stars
+    warpStars.forEach(s => {
+      s.speed += 0.25;
+      const len = s.speed * 3;
+      ctx.strokeStyle = `rgba(0,255,255,${Math.min(s.speed / 20, 0.8)})`;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(s.x, s.y);
+      ctx.lineTo(
+        s.x + Math.cos(s.angle) * len,
+        s.y + Math.sin(s.angle) * len
+      );
+      ctx.stroke();
+
+      s.x += Math.cos(s.angle) * s.speed * 0.5;
+      s.y += Math.sin(s.angle) * s.speed * 0.5;
+
+      if (s.x < 0 || s.x > bgW || s.y < 0 || s.y > bgH) {
+        s.x = bgW/2 + (Math.random()-0.5)*50;
+        s.y = bgH/2 + (Math.random()-0.5)*50;
+        s.speed = 1;
       }
-    };
+    });
 
-    // Secret Word Bank (Crew Word vs Impostor Decoy)
-    const WORD_BANK = {
-      gaming: [
-        { crew: "Minecraft", impostor: "Roblox" },
-        { crew: "GTA 5", impostor: "Cyberpunk" },
-        { crew: "Free Fire", impostor: "PUBG Mobile" },
-        { crew: "PlayStation", impostor: "Xbox" }
-      ],
-      college: [
-        { crew: "Exam Hall", impostor: "Library" },
-        { crew: "Hostel Warden", impostor: "College Dean" },
-        { crew: "Proxy Attendance", impostor: "Mass Bunk" },
-        { crew: "Canteen Chai", impostor: "Hostel Mess" }
-      ],
-      food: [
-        { crew: "Pizza", impostor: "Burger" },
-        { crew: "Biryani", impostor: "Fried Rice" },
-        { crew: "Maggi", impostor: "Pasta" },
-        { crew: "Ice Cream", impostor: "Milkshake" }
-      ],
-      movies: [
-        { crew: "Spider-Man", impostor: "Batman" },
-        { crew: "Iron Man", impostor: "Captain America" },
-        { crew: "Avatar", impostor: "Interstellar" },
-        { crew: "Harry Potter", impostor: "Lord of the Rings" }
-      ],
-      tech: [
-        { crew: "Google", impostor: "Microsoft" },
-        { crew: "iPhone", impostor: "Android" },
-        { crew: "Python", impostor: "JavaScript" },
-        { crew: "ChatGPT", impostor: "Gemini" }
-      ]
-    };
-
-    // Game State
-    let players = ["Sayan", "Rahul", "Alex", "Maya"];
-    let currentRevealIndex = 0;
-    let imposterIndex = -1;
-    let selectedWordPair = null;
-    let votes = {};
-    let selectedVote = null;
-
-    // DOM Elements
-    const screenLobby = document.getElementById('screenLobby');
-    const screenReveal = document.getElementById('screenReveal');
-    const screenDiscussion = document.getElementById('screenDiscussion');
-    const screenVoting = document.getElementById('screenVoting');
-    const screenResult = document.getElementById('screenResult');
-
-    const playersListEl = document.getElementById('playersList');
-    const playerCountEl = document.getElementById('playerCount');
-    const newPlayerNameInput = document.getElementById('newPlayerName');
-    const addPlayerBtn = document.getElementById('addPlayerBtn');
-    const startMissionBtn = document.getElementById('startMissionBtn');
-
-    const passInstruction = document.getElementById('passInstruction');
-    const revealCard = document.getElementById('revealCard');
-    const revealPrompt = document.getElementById('revealPrompt');
-    const revealContent = document.getElementById('revealContent');
-    const roleBadge = document.getElementById('roleBadge');
-    const roleDescription = document.getElementById('roleDescription');
-    const secretWord = document.getElementById('secretWord');
-    const nextPlayerBtn = document.getElementById('nextPlayerBtn');
-
-    const turnOrderList = document.getElementById('turnOrderList');
-    const emergencyMeetingBtn = document.getElementById('emergencyMeetingBtn');
-    const voteGrid = document.getElementById('voteGrid');
-    const confirmVoteBtn = document.getElementById('confirmVoteBtn');
-
-    const ejectMessage = document.getElementById('ejectMessage');
-    const ejectVerdict = document.getElementById('ejectVerdict');
-    const playAgainBtn = document.getElementById('playAgainBtn');
-
-    // Render Players in Lobby
-    function renderLobbyPlayers() {
-      playersListEl.innerHTML = players.map((p, idx) => `
-        <div class="player-tag">
-          🧑‍🚀 ${p}
-          ${players.length > 3 ? `<span onclick="removePlayer(${idx})" style="cursor:pointer; color:#ff3366; margin-left:4px;">&times;</span>` : ''}
-        </div>
-      `).join('');
-      playerCountEl.textContent = players.length;
+    // Ejected player label
+    if (frame < 40) {
+      ctx.fillStyle = `rgba(255,255,255,${ejectOpacity})`;
+      ctx.font = `bold ${Math.min(bgW * 0.08, 40)}px Orbitron, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.fillText(`${playerName}`, bgW/2, ejectY);
+      ejectY -= 3;
+      ejectOpacity -= 0.02;
     }
 
-    window.removePlayer = function(idx) {
-      if (players.length > 3) {
-        players.splice(idx, 1);
-        renderLobbyPlayers();
-      }
-    };
-
-    addPlayerBtn.addEventListener('click', () => {
-      const name = newPlayerNameInput.value.trim();
-      if (name && !players.includes(name)) {
-        players.push(name);
-        newPlayerNameInput.value = '';
-        renderLobbyPlayers();
-        AudioEngine.playBeep();
-      }
-    });
-
-    // START MISSION (RANDOM IMPOSTOR ALGORITHM)
-    startMissionBtn.addEventListener('click', () => {
-      AudioEngine.playAlarm();
-
-      // 1. Pick a completely random Impostor
-      imposterIndex = Math.floor(Math.random() * players.length);
-
-      // 2. Pick a random word pair from chosen category
-      const category = document.getElementById('categorySelect').value;
-      const categoryList = WORD_BANK[category];
-      selectedWordPair = categoryList[Math.floor(Math.random() * categoryList.length)];
-
-      currentRevealIndex = 0;
-      screenLobby.style.display = 'none';
-      screenReveal.style.display = 'block';
-
-      prepareRevealForCurrentPlayer();
-    });
-
-    // Prepare Secret Card for Current Player
-    function prepareRevealForCurrentPlayer() {
-      const playerName = players[currentRevealIndex];
-      passInstruction.textContent = `Pass to ${playerName}`;
-
-      revealCard.classList.remove('revealed');
-      revealPrompt.style.display = 'block';
-      revealContent.style.display = 'none';
-      nextPlayerBtn.style.display = 'none';
-
-      // Check if this player is the random Impostor
-      const isImpostor = (currentRevealIndex === imposterIndex);
-
-      if (isImpostor) {
-        roleBadge.textContent = "🚨 IMPOSTOR";
-        roleBadge.className = "role-badge role-impostor";
-        roleDescription.textContent = "Blend in! Your decoy word is:";
-        secretWord.textContent = selectedWordPair.impostor;
-      } else {
-        roleBadge.textContent = "🛡️ CREWMATE";
-        roleBadge.className = "role-badge role-crewmate";
-        roleDescription.textContent = "Find the impostor! Your word is:";
-        secretWord.textContent = selectedWordPair.crew;
-      }
+    // "EJECTED" text
+    if (frame > 15) {
+      ctx.fillStyle = `rgba(255,0,64,${textOpacity})`;
+      ctx.font = `900 ${Math.min(bgW * 0.12, 60)}px Orbitron, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.shadowColor = '#ff0040';
+      ctx.shadowBlur = 30;
+      ctx.fillText('EJECTED!', bgW/2, bgH/2 + 20);
+      ctx.shadowBlur = 0;
     }
 
-    // Tap to Reveal Card
-    revealCard.addEventListener('click', () => {
-      AudioEngine.playBeep();
-      revealCard.classList.add('revealed');
-      revealPrompt.style.display = 'none';
-      revealContent.style.display = 'block';
-      nextPlayerBtn.style.display = 'block';
-    });
-
-    // Next Player Button
-    nextPlayerBtn.addEventListener('click', () => {
-      AudioEngine.playBeep();
-      currentRevealIndex++;
-
-      if (currentRevealIndex < players.length) {
-        prepareRevealForCurrentPlayer();
-      } else {
-        // All players have seen their words! Start discussion.
-        startDiscussionRound();
-      }
-    });
-
-    // DISCUSSION ROUND
-    function startDiscussionRound() {
-      screenReveal.style.display = 'none';
-      screenDiscussion.style.display = 'block';
-
-      // Shuffle turn order so discussion is unpredictable
-      const shuffled = [...players].sort(() => Math.random() - 0.5);
-      turnOrderList.innerHTML = shuffled.map(p => `<li><strong>${p}</strong> gives 1 clue</li>`).join('');
+    frame++;
+    if (frame < 100) {
+      requestAnimationFrame(animate);
+    } else {
+      canvas.classList.remove('active');
+      callback();
     }
+  }
 
-    // EMERGENCY MEETING
-    emergencyMeetingBtn.addEventListener('click', () => {
-      AudioEngine.playAlarm();
-      screenDiscussion.style.display = 'none';
-      screenVoting.style.display = 'block';
+  navigator.vibrate && navigator.vibrate([100,50,100,50,500]);
+  playEjectSound();
+  animate();
+}
 
-      // Render Voting Grid
-      votes = {};
-      selectedVote = null;
-      renderVoteGrid();
-    });
+// ═══════════════════════════════════════════════════════════
+//  PART 9: AUDIO ENGINE
+// ═══════════════════════════════════════════════════════════
 
-    function renderVoteGrid() {
-      voteGrid.innerHTML = players.map(p => `
-        <div class="vote-card ${selectedVote === p ? 'selected' : ''}" onclick="selectVote('${p}')" style="${selectedVote === p ? 'border-color: #ff3366; background: rgba(255, 51, 102, 0.2);' : ''}">
-          <div style="font-size: 2rem;">🧑‍🚀</div>
-          <div class="name">${p}</div>
-        </div>
-      `).join('');
+let audioCtx;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playBeep(freq, duration, type = 'sine') {
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.value = freq;
+    osc.type = type;
+    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration + 0.1);
+    osc.start();
+    osc.stop(ctx.currentTime + duration + 0.1);
+  } catch(e) {}
+}
+
+function playEmergencySiren() {
+  try {
+    const ctx = getAudioCtx();
+    let t = ctx.currentTime;
+    for (let i = 0; i < 6; i++) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(440, t + i * 0.3);
+      osc.frequency.linearRampToValueAtTime(880, t + i * 0.3 + 0.15);
+      osc.frequency.linearRampToValueAtTime(440, t + i * 0.3 + 0.3);
+      gain.gain.setValueAtTime(0.15, t + i * 0.3);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.3 + 0.32);
+      osc.start(t + i * 0.3);
+      osc.stop(t + i * 0.3 + 0.35);
     }
+  } catch(e) {}
+}
 
-    window.selectVote = function(player) {
-      AudioEngine.playBeep();
-      selectedVote = player;
-      renderVoteGrid();
-    };
+function playEjectSound() {
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(800, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(50, ctx.currentTime + 1.5);
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.6);
+    osc.start();
+    osc.stop(ctx.currentTime + 1.6);
+  } catch(e) {}
+}
 
-    // CONFIRM EJECTION
-    confirmVoteBtn.addEventListener('click', () => {
-      if (!selectedVote) {
-        alert("Please tap a player to vote them out!");
-        return;
-      }
+// ═══════════════════════════════════════════════════════════
+//  PART 10: INIT
+// ═══════════════════════════════════════════════════════════
 
-      AudioEngine.playAlarm();
-      screenVoting.style.display = 'none';
-      screenResult.style.display = 'block';
+initBg();
+drawBackground();
 
-      const ejectedIndex = players.indexOf(selectedVote);
-      const wasImpostor = (ejectedIndex === imposterIndex);
+// Start with 3 blank slots
+addPlayerSlot();
+addPlayerSlot();
+addPlayerSlot();
 
-      ejectMessage.textContent = `${selectedVote} was ejected.`;
-
-      if (wasImpostor) {
-        ejectVerdict.textContent = "🎉 They WERE the Impostor! Crewmates Win!";
-        ejectVerdict.style.color = "var(--crew-cyan)";
-      } else {
-        const actualImpostorName = players[imposterIndex];
-        ejectVerdict.textContent = `💀 They were NOT the Impostor. ${actualImpostorName} was the Impostor!`;
-        ejectVerdict.style.color = "var(--impostor-red)";
-      }
-    });
-
-    // PLAY AGAIN
-    playAgainBtn.addEventListener('click', () => {
-      AudioEngine.playBeep();
-      screenResult.style.display = 'none';
-      screenLobby.style.display = 'block';
-    });
-
-    // Initialize
-    renderLobbyPlayers();
-  </script>
+console.log('🚀 IMPOSTOR: Cyber Space Edition — Loaded!');
+</script>
 </body>
 </html>
