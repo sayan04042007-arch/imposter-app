@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>IMPOSTOR: Cyber Space Edition</title>
+
+<!-- PWA & Mobile Install Meta Tags -->
+<link rel="manifest" href="data:application/manifest+json;utf-8,%7B%22name%22%3A%22IMPOSTOR%3A%20Cyber%20Space%22%2C%22short_name%22%3A%22Impostor%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23000000%22%2C%22theme_color%22%3A%22%23001122%22%7D">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Impostor Space">
+<meta name="theme-color" content="#001122">
+
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
 
@@ -34,18 +43,18 @@
     align-items: center;
     justify-content: center;
     z-index: 10;
-    padding: 20px;
+    padding: 16px;
   }
   .screen.active { display: flex; }
 
   /* ===== GLASS CARD ===== */
   .glass {
-    background: rgba(0,20,40,0.78);
+    background: rgba(0,20,40,0.80);
     border: 1px solid rgba(0,255,255,0.25);
     border-radius: 20px;
     backdrop-filter: blur(18px);
     box-shadow: 0 0 40px rgba(0,255,255,0.15), inset 0 0 30px rgba(0,0,0,0.3);
-    padding: 26px;
+    padding: 24px;
     width: 100%;
     max-width: 490px;
     max-height: 92vh;
@@ -63,7 +72,7 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     text-shadow: none;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
     animation: logoPulse 3s ease-in-out infinite;
   }
   @keyframes logoPulse {
@@ -74,29 +83,30 @@
   .subtitle {
     text-align: center;
     color: #00ffff88;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     letter-spacing: 3px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     text-transform: uppercase;
   }
 
-  /* ===== PLAYER SLOTS ===== */
+  /* ===== PLAYER SLOTS (WITH REMOVE BUTTON) ===== */
   .player-slot {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-    animation: slideIn 0.35s ease;
+    gap: 8px;
+    margin-bottom: 10px;
+    animation: slideIn 0.3s ease;
   }
   @keyframes slideIn {
-    from { opacity: 0; transform: translateX(-20px); }
+    from { opacity: 0; transform: translateX(-16px); }
     to { opacity: 1; transform: translateX(0); }
   }
 
   .slot-icon {
-    font-size: 1.4rem;
-    width: 36px;
+    font-size: 1.35rem;
+    width: 34px;
     text-align: center;
+    flex-shrink: 0;
   }
 
   .player-input {
@@ -104,13 +114,13 @@
     background: rgba(0,255,255,0.07);
     border: 1px solid rgba(0,255,255,0.3);
     border-radius: 10px;
-    padding: 12px 16px;
+    padding: 11px 14px;
     color: #fff;
     font-size: 1rem;
     font-family: 'Rajdhani', sans-serif;
     font-weight: 600;
     outline: none;
-    transition: all 0.3s;
+    transition: all 0.25s;
   }
   .player-input:focus {
     border-color: #00ffff;
@@ -120,6 +130,34 @@
   .player-input::placeholder { color: rgba(255,255,255,0.3); }
   .player-input.filled { border-color: #00ff88; box-shadow: 0 0 10px rgba(0,255,136,0.3); }
 
+  /* Delete Slot Button */
+  .remove-slot-btn {
+    background: rgba(255,0,64,0.12);
+    border: 1px solid rgba(255,0,64,0.35);
+    color: #ff4466;
+    border-radius: 10px;
+    width: 38px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .remove-slot-btn:hover {
+    background: rgba(255,0,64,0.4);
+    color: #fff;
+    border-color: #ff0040;
+    box-shadow: 0 0 14px rgba(255,0,64,0.5);
+    transform: scale(1.05);
+  }
+  .remove-slot-btn:active {
+    transform: scale(0.92);
+  }
+
   /* ===== BUTTONS ===== */
   .btn {
     width: 100%;
@@ -127,11 +165,11 @@
     border: none;
     border-radius: 12px;
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.98rem;
+    font-size: 0.96rem;
     font-weight: 700;
     cursor: pointer;
-    margin: 6px 0;
-    transition: all 0.3s;
+    margin: 5px 0;
+    transition: all 0.25s;
     letter-spacing: 1px;
     position: relative;
     overflow: hidden;
@@ -225,11 +263,10 @@
   }
   select option { background: #001122; color: #fff; }
 
-  /* ===== SECTION DIVIDER ===== */
   .divider {
     border: none;
     border-top: 1px solid rgba(0,255,255,0.12);
-    margin: 16px 0;
+    margin: 14px 0;
   }
 
   /* ===== ROLE CARD ===== */
@@ -268,7 +305,6 @@
     text-shadow: 0 0 15px rgba(255,255,68,0.5);
   }
 
-  /* ===== TURN INDICATOR ===== */
   .turn-indicator {
     font-family: 'Orbitron', sans-serif;
     font-size: 1.1rem;
@@ -406,7 +442,6 @@
     box-shadow: 0 0 15px rgba(255,0,64,0.5);
   }
 
-  /* ===== RESULT SCREEN ===== */
   .result-emoji { font-size: 4.5rem; display: block; text-align: center; margin: 6px 0; animation: bounceIn 0.6s cubic-bezier(0.68,-0.55,0.265,1.55); }
   @keyframes bounceIn {
     0% { transform: scale(0); opacity: 0; }
@@ -431,7 +466,7 @@
     background: linear-gradient(135deg, rgba(0,15,30,0.98), rgba(0,30,60,0.98));
     border: 1px solid rgba(0,255,255,0.35);
     border-radius: 20px;
-    padding: 24px;
+    padding: 22px;
     width: 100%;
     max-width: 450px;
     max-height: 88vh;
@@ -499,7 +534,6 @@
     50% { opacity: 0.5; }
   }
 
-  /* ===== AIRLOCK ===== */
   .airlock-canvas {
     position: fixed;
     top: 0; left: 0;
@@ -509,34 +543,31 @@
   }
   .airlock-canvas.active { display: block; }
 
-  /* ===== SCROLLBAR ===== */
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: rgba(0,255,255,0.3); border-radius: 2px; }
 
-  /* ===== HEARTBEAT ===== */
   #heartbeatSvg { width: 100%; height: 60px; }
   .hb-line { stroke: #00ff88; stroke-width: 2; fill: none; }
 
-  /* ===== ADD SLOT BTN ===== */
   .add-slot-btn {
     width: 100%;
     padding: 10px;
     background: transparent;
     border: 1px dashed rgba(0,255,255,0.3);
     border-radius: 10px;
-    color: rgba(0,255,255,0.6);
+    color: rgba(0,255,255,0.7);
     font-family: 'Rajdhani', sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    font-weight: 600;
     cursor: pointer;
-    margin: 4px 0 12px;
-    transition: all 0.3s;
+    margin: 4px 0 10px;
+    transition: all 0.25s;
   }
-  .add-slot-btn:hover { border-color: #00ffff; color: #00ffff; background: rgba(0,255,255,0.05); }
+  .add-slot-btn:hover { border-color: #00ffff; color: #00ffff; background: rgba(0,255,255,0.06); }
 
   .hint { font-size: 0.78rem; color: rgba(255,255,255,0.35); text-align: center; margin-top: 8px; }
 
-  /* ===== DISCUSSION TIMER ===== */
   .timer-ring { display: flex; justify-content: center; margin: 10px 0; }
   .timer-num {
     font-family: 'Orbitron', sans-serif;
@@ -572,14 +603,24 @@
     <div class="logo">☠ IMPOSTOR</div>
     <div class="subtitle">⚡ Cyber Space Edition ⚡</div>
 
-    <button class="btn btn-ghost" onclick="openRulesModal()">📋 Mission Briefing (Read Rules)</button>
+    <!-- Quick action buttons: Rules & Download -->
+    <div style="display:flex; gap:8px; margin-bottom:12px;">
+      <button class="btn btn-ghost" style="flex:1; margin:0;" onclick="openRulesModal()">📋 Rules</button>
+      <button class="btn btn-ghost" style="flex:1; margin:0; color:#ffd700; border-color:rgba(255,215,0,0.4);" onclick="openDownloadModal()">📲 Install / Download</button>
+    </div>
 
     <hr class="divider">
 
-    <div style="font-size:0.8rem; color:#00ffff88; letter-spacing:2px; text-transform:uppercase; margin-bottom:12px;">
-      👥 Enter Player Names
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+      <span style="font-size:0.8rem; color:#00ffff88; letter-spacing:2px; text-transform:uppercase;">
+        👥 Player Names
+      </span>
+      <span style="font-size:0.75rem; color:#aaa;" id="slotCounterText">
+        3 Players
+      </span>
     </div>
 
+    <!-- Dynamic Player Slots -->
     <div id="playerSlots"></div>
 
     <button class="add-slot-btn" onclick="addPlayerSlot()">＋ Add Another Player</button>
@@ -667,7 +708,7 @@
     <div class="logo" style="font-size:1.5rem; margin-bottom:4px;">🗳️ SECRET VOTING</div>
     <div class="subtitle" style="margin-bottom:14px;">Every player casts a private vote</div>
 
-    <!-- PRIVACY GATE: Shown before each player votes to prevent peeking -->
+    <!-- PRIVACY GATE: Shown before each player votes -->
     <div id="votingPrivacyGate" style="text-align:center; padding:10px 0;">
       <div class="voter-box">
         <div class="voter-step" id="voterStepText">VOTER 1 OF 3</div>
@@ -706,7 +747,7 @@
     <div class="logo" style="font-size:1.6rem;" id="resultTitle">ROUND COMPLETE</div>
     <div style="color:#ddd; font-size:0.95rem; margin:10px 0; line-height:1.5;" id="resultDesc"></div>
 
-    <!-- WINNERS BOX: Highlights players who got the right vote -->
+    <!-- WINNERS BOX -->
     <div class="winner-box" id="winnerBox">
       <div style="font-family:'Orbitron',sans-serif; font-size:0.9rem; color:#ffd700; letter-spacing:2px; font-weight:900; margin-bottom:6px;">
         👑 ROUND WINNERS (CORRECT VOTES)
@@ -731,6 +772,52 @@
 
     <button class="btn btn-primary" onclick="playAgain()">🔄 Play Again (New Words)</button>
     <button class="btn btn-secondary" onclick="backToLobby()">🏠 Back to Lobby</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     MODAL: DOWNLOAD & INSTALL TO PHONE
+═══════════════════════════════════════════ -->
+<div class="modal-overlay" id="downloadModal">
+  <div class="modal-box">
+    <div style="text-align:center; margin-bottom:10px;">
+      <div style="font-size:2.8rem; animation:float 2s ease-in-out infinite;">📲</div>
+      <div class="modal-title" style="margin-bottom:4px;">INSTALL / DOWNLOAD GAME</div>
+      <div style="font-size:0.8rem; color:#00ffff88; letter-spacing:1px;">PLAY OFFLINE ANYTIME ON YOUR PHONE</div>
+    </div>
+
+    <!-- Option 1: Native PWA App Install -->
+    <div style="background:rgba(0,255,255,0.06); border:1px solid rgba(0,255,255,0.25); border-radius:14px; padding:16px; margin:14px 0; text-align:center;">
+      <div style="font-family:'Orbitron',sans-serif; font-size:0.95rem; color:#00ffff; font-weight:700; margin-bottom:6px;">
+        📱 Option 1: Add as App to Home Screen
+      </div>
+      <div style="font-size:0.82rem; color:#ccc; line-height:1.5; margin-bottom:12px;">
+        Installs onto your home screen! Opens full-screen with no browser address bar and works completely offline.
+      </div>
+      <button class="btn btn-primary" id="pwaInstallBtn" onclick="triggerPwaInstall()">
+        ⚡ INSTALL APP TO PHONE
+      </button>
+
+      <div style="text-align:left; font-size:0.78rem; color:#aaa; margin-top:10px; line-height:1.6; border-top:1px solid rgba(255,255,255,0.1); padding-top:8px;">
+        <b>• Android (Chrome / Brave):</b> Tap the 3 dots <b>⋮</b> ➔ tap <b>"Install app"</b> or <b>"Add to Home screen"</b>.<br>
+        <b>• iPhone (Safari):</b> Tap the Share button <b>⎋</b> ➔ tap <b>"Add to Home Screen"</b>.
+      </div>
+    </div>
+
+    <!-- Option 2: Download Standalone HTML File -->
+    <div style="background:rgba(255,215,0,0.06); border:1px solid rgba(255,215,0,0.25); border-radius:14px; padding:16px; margin:14px 0; text-align:center;">
+      <div style="font-family:'Orbitron',sans-serif; font-size:0.95rem; color:#ffd700; font-weight:700; margin-bottom:6px;">
+        💾 Option 2: Download Offline Game File
+      </div>
+      <div style="font-size:0.82rem; color:#ccc; line-height:1.5; margin-bottom:12px;">
+        Downloads the full standalone game file directly to your phone downloads folder. Double-tap to open & play with friends anywhere with zero internet!
+      </div>
+      <button class="btn btn-secondary" style="border-color:#ffd700; color:#ffd700;" onclick="downloadOfflineGameFile()">
+        📥 DOWNLOAD OFFLINE FILE (.html)
+      </button>
+    </div>
+
+    <button class="btn btn-ghost" style="margin-top:6px;" onclick="closeDownloadModal()">✖ Close</button>
   </div>
 </div>
 
@@ -997,7 +1084,6 @@ function drawBackground() {
 
   nebulaClouds.forEach(n => n.draw(bgCtx, bgTime));
 
-  // Planet with ring in bottom corner
   const pX = bgW * 0.88, pY = bgH * 0.85, pR = Math.min(bgW, bgH) * 0.22;
   bgCtx.beginPath();
   bgCtx.arc(pX, pY, pR, 0, Math.PI * 2);
@@ -1023,7 +1109,6 @@ function drawBackground() {
   bgCtx.stroke();
   bgCtx.restore();
 
-  // Twinkling stars
   stars.forEach(s => {
     s.opacity += s.twinkleSpeed * s.twinkleDir;
     if (s.opacity >= 1) s.twinkleDir = -1;
@@ -1111,34 +1196,77 @@ function getWordFromDifferentCategory(excludeCategory) {
 }
 
 // ═══════════════════════════════════════════════════════════
-//  PART 3: PLAYER REGISTRATION
+//  PART 3: PLAYER REGISTRATION (ADD & DELETE SLOTS)
 // ═══════════════════════════════════════════════════════════
 
-let slotCount = 0;
+let slotCounter = 0;
 const MIN_PLAYERS = 3;
 const ICONS = ['🧑‍🚀','👩‍🚀','🧑‍💻','👨‍🔬','👩‍🔬','🕵️','🤖','👾'];
 
 function addPlayerSlot() {
-  slotCount++;
+  slotCounter++;
+  const uniqueId = 'slot_' + Date.now() + '_' + slotCounter;
   const container = document.getElementById('playerSlots');
   const slot = document.createElement('div');
   slot.className = 'player-slot';
-  slot.id = `slot-${slotCount}`;
+  slot.id = uniqueId;
+
+  const currentCount = document.querySelectorAll('.player-slot').length + 1;
+  const icon = ICONS[(currentCount - 1) % ICONS.length];
+
   slot.innerHTML = `
-    <span class="slot-icon">${ICONS[(slotCount-1) % ICONS.length]}</span>
+    <span class="slot-icon">${icon}</span>
     <input
       class="player-input"
-      id="player-${slotCount}"
       type="text"
-      placeholder="Player ${slotCount} name..."
+      placeholder="Player ${currentCount} name..."
       maxlength="14"
       oninput="validatePlayers()"
       autocomplete="off"
     />
+    <button class="remove-slot-btn" onclick="removePlayerSlot('${uniqueId}')" title="Delete player">✕</button>
   `;
   container.appendChild(slot);
-  document.getElementById(`player-${slotCount}`).focus();
+
+  const inputEl = slot.querySelector('.player-input');
+  if (inputEl) inputEl.focus();
+
+  reindexSlots();
   validatePlayers();
+  playBeep(400, 0.06, 'sine');
+}
+
+function removePlayerSlot(slotId) {
+  const slot = document.getElementById(slotId);
+  if (!slot) return;
+
+  slot.style.transition = 'all 0.2s ease';
+  slot.style.opacity = '0';
+  slot.style.transform = 'translateX(20px)';
+
+  setTimeout(() => {
+    slot.remove();
+    reindexSlots();
+    validatePlayers();
+    playBeep(260, 0.08, 'sawtooth');
+  }, 180);
+}
+
+function reindexSlots() {
+  const slots = document.querySelectorAll('.player-slot');
+  slots.forEach((s, idx) => {
+    const icon = s.querySelector('.slot-icon');
+    const input = s.querySelector('.player-input');
+    if (icon) icon.textContent = ICONS[idx % ICONS.length];
+    if (input && !input.value) {
+      input.placeholder = `Player ${idx + 1} name...`;
+    }
+  });
+
+  const countText = document.getElementById('slotCounterText');
+  if (countText) {
+    countText.textContent = `${slots.length} Player${slots.length !== 1 ? 's' : ''}`;
+  }
 }
 
 function validatePlayers() {
@@ -1174,14 +1302,13 @@ function validatePlayers() {
 // ═══════════════════════════════════════════════════════════
 
 let players = [];
-let roles = {}; // { playerName: 'crew'|'impostor'|'jester' }
-let words = {}; // { playerName: word }
+let roles = {};
+let words = {};
 let currentRevealIndex = 0;
 let discussionTimer;
 let gameCategory = 'random';
 
-// Voting state
-let playerVotes = {}; // voterName -> targetName
+let playerVotes = {};
 let currentVoterIdx = 0;
 let selectedCandidate = null;
 
@@ -1239,7 +1366,7 @@ function startGame() {
 }
 
 // ═══════════════════════════════════════════════════════════
-//  PART 5: REVEAL PHASE (Secret & Neutral for All)
+//  PART 5: REVEAL PHASE
 // ═══════════════════════════════════════════════════════════
 
 function showRevealFor(index) {
@@ -1307,7 +1434,7 @@ function startDiscussion() {
 }
 
 // ═══════════════════════════════════════════════════════════
-//  PART 7: TURN-BY-TURN PRIVATE VOTING (EVERYONE VOTES!)
+//  PART 7: TURN-BY-TURN PRIVATE VOTING
 // ═══════════════════════════════════════════════════════════
 
 function goToVoting() {
@@ -1339,7 +1466,6 @@ function openPrivateBallot() {
   document.getElementById('currentVoterDisplay').textContent = voter.toUpperCase();
 
   const container = document.getElementById('candidateButtons');
-  // Show all OTHER players as voting candidates
   container.innerHTML = players
     .filter(p => p !== voter)
     .map(p => `
@@ -1395,14 +1521,12 @@ function submitCurrentVote() {
 }
 
 function finishAllVoting() {
-  // Tally all votes
   const tally = {};
   players.forEach(p => tally[p] = 0);
   Object.values(playerVotes).forEach(target => {
     tally[target] = (tally[target] || 0) + 1;
   });
 
-  // Find max votes
   let maxCount = -1;
   let mostVotedPlayers = [];
   players.forEach(p => {
@@ -1414,7 +1538,6 @@ function finishAllVoting() {
     }
   });
 
-  // Check for tie
   if (mostVotedPlayers.length > 1) {
     showResult('tie', null, tally);
   } else {
@@ -1434,7 +1557,6 @@ function showResult(type, ejected, tally) {
   const realJester = players.find(p => roles[p] === 'jester');
   const ejectedRole = ejected ? roles[ejected] : null;
 
-  // 🎯 Check who cast the RIGHT VOTE (voted for the real Impostor!)
   const correctVoters = players.filter(p => playerVotes[p] === realImpostor);
 
   let emoji, title, desc;
@@ -1457,7 +1579,6 @@ function showResult(type, ejected, tally) {
     desc = `<b>${ejected}</b> was innocent! The real Impostor (<b>${realImpostor}</b>) escaped detection! 🔪`;
   }
 
-  // Populate WINNERS BOX
   const winnerListEl = document.getElementById('winnerList');
   const winnerSubEl = document.getElementById('winnerSub');
 
@@ -1473,7 +1594,6 @@ function showResult(type, ejected, tally) {
     winnerSubEl.textContent = `The Impostor outplayed the entire crew!`;
   }
 
-  // If Impostor survived, they also win
   if (ejectedRole !== 'impostor' && type !== 'tie') {
     winnerPillsHtml += ` <span class="winner-pill" style="background:linear-gradient(135deg,#ff0040,#ff6600); color:#fff;">🔪 ${realImpostor} (Survived)</span>`;
   } else if (ejectedRole === 'jester') {
@@ -1483,7 +1603,6 @@ function showResult(type, ejected, tally) {
 
   winnerListEl.innerHTML = winnerPillsHtml;
 
-  // Populate Vote Breakdown Ledger
   const breakdownEl = document.getElementById('voteBreakdownList');
   breakdownEl.innerHTML = players.map(p => {
     const target = playerVotes[p];
@@ -1500,7 +1619,6 @@ function showResult(type, ejected, tally) {
     `;
   }).join('');
 
-  // Populate Role & Words Reveal
   const roleRevealEl = document.getElementById('roleRevealBox');
   roleRevealEl.innerHTML = players.map(p => {
     const r = roles[p];
@@ -1534,7 +1652,61 @@ function backToLobby() {
 }
 
 // ═══════════════════════════════════════════════════════════
-//  PART 9: MODALS & TOOLS
+//  PART 9: DOWNLOAD & INSTALL TO PHONE (OFFLINE PWA & FILE)
+// ═══════════════════════════════════════════════════════════
+
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const pwaBtn = document.getElementById('pwaInstallBtn');
+  if (pwaBtn) {
+    pwaBtn.textContent = '⚡ 1-TAP INSTALL APP NOW';
+  }
+});
+
+function openDownloadModal() {
+  document.getElementById('downloadModal').classList.add('open');
+  playBeep(440, 0.08, 'sine');
+}
+function closeDownloadModal() {
+  document.getElementById('downloadModal').classList.remove('open');
+}
+
+function triggerPwaInstall() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User installed the PWA app!');
+      }
+      deferredPrompt = null;
+    });
+  } else {
+    alert("📲 To install as an app on your phone:\n\n• Android (Chrome/Brave): Tap the 3 dots (⋮) in the top corner > Tap 'Install app' or 'Add to Home screen'.\n\n• iPhone (Safari): Tap the Share icon (square with arrow) > Tap 'Add to Home Screen'.");
+  }
+}
+
+function downloadOfflineGameFile() {
+  try {
+    const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+    const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'impostor-space-game.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    playBeep(640, 0.15, 'sine');
+  } catch (err) {
+    alert('Download ready: Please save the page from your browser menu.');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PART 10: MODALS & TOOLS
 // ═══════════════════════════════════════════════════════════
 
 function openRulesModal() {
@@ -1668,7 +1840,7 @@ function triggerAirlock(playerName, callback) {
 }
 
 // ═══════════════════════════════════════════════════════════
-//  PART 10: SYNTHESIZED SOUND FX
+//  PART 11: SYNTHESIZED SOUND FX
 // ═══════════════════════════════════════════════════════════
 
 let audioCtx;
@@ -1732,13 +1904,13 @@ function playEjectSound() {
 }
 
 // ═══════════════════════════════════════════════════════════
-//  PART 11: INITIALIZATION
+//  PART 12: INITIALIZATION
 // ═══════════════════════════════════════════════════════════
 
 initBg();
 drawBackground();
 
-// Start with 3 empty input slots for custom names
+// Start with 3 empty input slots
 addPlayerSlot();
 addPlayerSlot();
 addPlayerSlot();
@@ -1751,7 +1923,7 @@ window.addEventListener('load', () => {
   }, 600);
 });
 
-console.log('🚀 IMPOSTOR: Cyber Space Edition — Loaded with Secret Ballot Voting & Right-Vote Winner System!');
+console.log('🚀 IMPOSTOR: Cyber Space Edition — Ready with Slot Deletion & Mobile Download/Install!');
 </script>
 </body>
 </html>
