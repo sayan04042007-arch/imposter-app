@@ -606,19 +606,76 @@
 </div>
 
 <!-- ═══════════════════════════════════════════
-     MODAL: RULES
+     MODAL: WELCOME / RULES (auto-shows on load)
 ═══════════════════════════════════════════ -->
 <div class="modal-overlay" id="rulesModal">
   <div class="modal-box">
-    <div class="modal-title">📋 MISSION BRIEFING</div>
-    <div class="modal-rule"><span class="rule-num">01</span><span>All players sit together. One person holds the phone as "Game Master" to start the game.</span></div>
-    <div class="modal-rule"><span class="rule-num">02</span><span>Each player gets a secret role: <b style="color:#00ffff">Crew</b>, <b style="color:#ff0040">Impostor</b>, or <b style="color:#ffaa00">Jester</b>.</span></div>
-    <div class="modal-rule"><span class="rule-num">03</span><span>Crew get the <b>real word</b> (e.g., "Pizza"). Impostors get a <b>similar fake word</b> (e.g., "Burger").</span></div>
-    <div class="modal-rule"><span class="rule-num">04</span><span>During discussion, each player gives ONE clue about their word without saying it directly.</span></div>
-    <div class="modal-rule"><span class="rule-num">05</span><span>Vote to eject the most suspicious player. Most votes = ejected into space! 🚀</span></div>
-    <div class="modal-rule"><span class="rule-num">06</span><span><b style="color:#00ffff">Crew wins</b> by ejecting the Impostor. <b style="color:#ff0040">Impostor wins</b> if not caught. <b style="color:#ffaa00">Jester wins</b> by getting voted out!</span></div>
-    <div class="modal-rule"><span class="rule-num">07</span><span>Use the Sus-O-Meter 💓 to add dramatic tension during accusation!</span></div>
-    <button class="btn btn-primary" style="margin-top:20px;" onclick="closeRulesModal()">🚀 Got It — Let's Play!</button>
+
+    <!-- Animated header -->
+    <div style="text-align:center; margin-bottom:6px;">
+      <div style="font-size:2.8rem; animation:float 2s ease-in-out infinite;">☠️</div>
+      <div style="font-family:'Orbitron',sans-serif; font-size:1.5rem; font-weight:900;
+                  background:linear-gradient(135deg,#00ffff,#ff00ff,#ffff00);
+                  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+                  background-clip:text; margin:6px 0;">
+        IMPOSTOR
+      </div>
+      <div style="font-size:0.75rem; color:#00ffff88; letter-spacing:3px; text-transform:uppercase; margin-bottom:16px;">
+        ⚡ Cyber Space Edition ⚡
+      </div>
+    </div>
+
+    <div class="modal-title" style="font-size:1rem; margin-bottom:14px;">
+      📋 MISSION BRIEFING
+    </div>
+
+    <!-- Rules -->
+    <div class="modal-rule">
+      <span class="rule-num">01</span>
+      <span>All players sit together. One person is the <b style="color:#00ffff">Game Master</b> who holds the phone and enters names.</span>
+    </div>
+    <div class="modal-rule">
+      <span class="rule-num">02</span>
+      <span>The phone is passed to each player privately. They tap to see their secret role.</span>
+    </div>
+    <div class="modal-rule">
+      <span class="rule-num">03</span>
+      <span>
+        <b style="color:#00ffff">🚀 Crew</b> — gets the real word (e.g. <i>"Pizza"</i>).<br>
+        <b style="color:#ff0040">🔪 Impostor</b> — gets a fake similar word (e.g. <i>"Burger"</i>).<br>
+        <b style="color:#ffaa00">🤡 Jester</b> — gets NO word. Wants to be ejected!
+      </span>
+    </div>
+    <div class="modal-rule">
+      <span class="rule-num">04</span>
+      <span>During discussion, each player gives <b>ONE clue</b> about their word — without saying it directly!</span>
+    </div>
+    <div class="modal-rule">
+      <span class="rule-num">05</span>
+      <span>Vote to eject the most suspicious player. Most votes = <b>launched into space 🚀</b></span>
+    </div>
+    <div class="modal-rule">
+      <span class="rule-num">06</span>
+      <span>
+        <b style="color:#00ffff">Crew wins</b> → eject the Impostor 🎉<br>
+        <b style="color:#ff0040">Impostor wins</b> → stay hidden till the end 😈<br>
+        <b style="color:#ffaa00">Jester wins</b> → trick everyone into ejecting you 🤡
+      </span>
+    </div>
+    <div class="modal-rule">
+      <span class="rule-num">07</span>
+      <span>Use <b>Sus-O-Meter 💓</b> & <b>Emergency Meeting 🚨</b> for extra drama!</span>
+    </div>
+
+    <hr style="border:none; border-top:1px solid rgba(0,255,255,0.15); margin:18px 0;">
+
+    <!-- CTA -->
+    <button class="btn btn-primary" onclick="closeRulesModal()">
+      🚀 LET'S PLAY — ENTER LOBBY
+    </button>
+    <p style="text-align:center; font-size:0.72rem; color:rgba(255,255,255,0.25); margin-top:10px;">
+      Tap the 📋 button in the lobby to read rules again anytime
+    </p>
   </div>
 </div>
 
@@ -1486,6 +1543,14 @@ drawBackground();
 addPlayerSlot();
 addPlayerSlot();
 addPlayerSlot();
+
+// ── AUTO-SHOW MISSION BRIEFING on page load
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('rulesModal').classList.add('open');
+    playBeep(440, 0.3, 'sine');
+  }, 600); // slight delay so background finishes loading nicely
+});
 
 console.log('🚀 IMPOSTOR: Cyber Space Edition — Loaded!');
 </script>
